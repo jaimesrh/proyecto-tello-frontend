@@ -30,7 +30,7 @@ export const gastronomiaData: Platillo[] = [
     region: 'Altiplano',
     descripcion: 'Un guiso espeso y rico tradicionalmente servido en las celebraciones matrimoniales del desierto potosino.',
     ingredientes: ['Carne de cerdo', 'Chiles secos', 'Especias', 'Naranja', 'Chocolate'],
-    imagen: '/images/tierra-nueva.jpg' // Placeholder
+    imagen: '/images/asado_de_boda.png'
   },
   {
     id: 'bocoles',
@@ -38,6 +38,6 @@ export const gastronomiaData: Platillo[] = [
     region: 'Huasteca',
     descripcion: 'Gorditas de masa mezcladas con manteca, cocidas en comal y rellenas de diferentes guisos.',
     ingredientes: ['Masa de maíz', 'Manteca', 'Frijoles refritos', 'Queso', 'Chicharrón'],
-    imagen: '/images/aquismon.jpg' // Placeholder
+    imagen: '/images/bocoles.png'
   }
 ];
