@@ -10,11 +10,11 @@ export default function Footer() {
           <div>
             <Link href="/" className="inline-block">
               <h2 className="text-xl font-bold tracking-tight text-amber-900 dark:text-amber-500">
-                Pueblos Magicos SLP
+                Conoce San Luis Potosí
               </h2>
             </Link>
             <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 max-w-xs">
-              Explora la riqueza cultural, natural y sostenible de los 6 Pueblos Magicos del estado de San Luis Potosi.
+              Explora la riqueza cultural, natural y sostenible del estado de San Luis Potosí.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function Footer() {
           </div>
 
           <div className="text-left md:text-right text-sm text-stone-500 dark:text-stone-400">
-            <p>&copy; {currentYear} Pueblos Magicos SLP.</p>
+            <p>&copy; {currentYear} Conoce San Luis Potosí.</p>
             <p className="mt-1">Desarrollado para promover el turismo sostenible.</p>
           </div>
         </div>

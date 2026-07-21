@@ -19,7 +19,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             <MapPin className="w-6 h-6 text-amber-700 dark:text-amber-500 group-hover:scale-110 transition-transform duration-300" />
             <span className="font-display font-bold text-xl tracking-tight hidden sm:block">
-              Pueblos Mágicos <span className="text-amber-700 dark:text-amber-500 italic">SLP</span>
+              Conoce <span className="text-amber-700 dark:text-amber-500 italic">San Luis Potosí</span>
             </span>
           </Link>
 

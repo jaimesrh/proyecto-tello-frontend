@@ -3,8 +3,8 @@ import { Mountain, MapPin, TreePine, BarChart3 } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Análisis Comparativo | Pueblos Magicos SLP',
-  description: 'Comparativa de datos altitudinales, climaticos y turisticos de los Pueblos Magicos de San Luis Potosi.',
+  title: 'Análisis Comparativo | Conoce San Luis Potosí',
+  description: 'Comparativa de datos altitudinales, climáticos y turísticos del estado de San Luis Potosí.',
 };
 
 export const revalidate = 3600;

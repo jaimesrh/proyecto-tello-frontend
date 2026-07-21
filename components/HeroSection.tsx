@@ -33,7 +33,7 @@ export default function HeroSection() {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-medium tracking-tight leading-[1.1] mb-8">
-            <span className="text-gradient drop-shadow-sm">Pueblos Mágicos</span>
+            <span className="text-gradient drop-shadow-sm">Conoce San Luis Potosí</span>
           </h1>
 
           <p className="text-lg sm:text-xl font-sans text-surface-800/80 dark:text-surface-100/80 max-w-2xl mx-auto leading-relaxed mb-12">

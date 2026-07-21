@@ -8,8 +8,8 @@ const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', axe
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Pueblos Magicos | San Luis Potosi',
-  description: 'Descubre los 6 Pueblos Magicos del estado de San Luis Potosi. Explora su cultura, atractivos naturales, gastronomia y desarrollo sostenible.',
+  title: 'Conoce San Luis Potosi',
+  description: 'Conoce San Luis Potosi. Explora su cultura, atractivos naturales, gastronomia y desarrollo sostenible.',
 };
 
 export default function RootLayout({
