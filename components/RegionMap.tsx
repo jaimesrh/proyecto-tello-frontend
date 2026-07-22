@@ -35,10 +35,10 @@ const regionPaths: Record<string, { path: string; labelX: number; labelY: number
 };
 
 const regionColors: Record<string, { fill: string; hover: string; text: string; bg: string }> = {
-  Huasteca: { fill: '#237a4b', hover: '#2ea063', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
-  Altiplano: { fill: '#c47b2b', hover: '#db8e35', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
-  Centro: { fill: '#b84a2b', hover: '#d45837', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
-  Media: { fill: '#b88a28', hover: '#d4a133', text: 'text-media dark:text-media', bg: 'bg-media' },
+  Huasteca: { fill: '#16a34a', hover: '#22c55e', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
+  Altiplano: { fill: '#eab308', hover: '#facc15', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
+  Centro: { fill: '#dc2626', hover: '#ef4444', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
+  Media: { fill: '#ea580c', hover: '#f97316', text: 'text-media dark:text-media', bg: 'bg-media' },
 };
 
 type LayerType = 'PUEBLOS_MAGICOS' | 'PARAJES_HIDROLOGICOS';
@@ -132,10 +132,10 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                     <path
                       d={pathData.path}
                       fill={isActive || isHovered ? colors.hover : colors.fill}
-                      fillOpacity={isActive ? 0.85 : isHovered ? 0.7 : 0.55}
-                      stroke={isActive ? '#ffffff' : colors.hover}
-                      strokeOpacity={isActive ? 0.9 : 0.5}
-                      strokeWidth={isActive ? 2 : 1.2}
+                      fillOpacity={isActive ? 0.95 : isHovered ? 0.88 : 0.75}
+                      stroke="#ffffff"
+                      strokeOpacity={isActive ? 0.9 : 0.4}
+                      strokeWidth={isActive ? 2.5 : 1.5}
                       strokeLinejoin="round"
                       strokeLinecap="round"
                       className="cursor-pointer transition-all duration-300"

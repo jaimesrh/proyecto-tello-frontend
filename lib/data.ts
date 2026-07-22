@@ -5,7 +5,7 @@ const regionesData: Region[] = [
     id: 1,
     nombre: 'Huasteca',
     descripcion: 'Region tropical al oriente del estado, caracterizada por selvas, rios caudalosos, cascadas monumentales y una rica herencia cultural Tenek.',
-    colorHex: '#166534',
+    colorHex: '#16a34a',
     parajes: [
       {
         id: 1,
@@ -103,7 +103,7 @@ const regionesData: Region[] = [
     id: 2,
     nombre: 'Altiplano',
     descripcion: 'Vasta meseta semidesertica al norte del estado, con paisajes de alta montana y legado minero colonial.',
-    colorHex: '#B45309',
+    colorHex: '#eab308',
     parajes: [
       {
         id: 7,
@@ -133,7 +133,7 @@ const regionesData: Region[] = [
     id: 3,
     nombre: 'Centro',
     descripcion: 'Corazon geografico y cultural del estado, con tradiciones textiles ancestrales, haciendas historicas y balnearios.',
-    colorHex: '#9A3412',
+    colorHex: '#dc2626',
     parajes: [
       {
         id: 8,
@@ -195,7 +195,7 @@ const regionesData: Region[] = [
     id: 4,
     nombre: 'Media',
     descripcion: 'Zona de transicion entre la sierra y las planicies aridas, con legado de frontera civilizatoria.',
-    colorHex: '#A16207',
+    colorHex: '#ea580c',
     parajes: [
       {
         id: 11,
@@ -272,7 +272,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Epicentro del ecoturismo extremo en la Huasteca Potosina, hogar de la cascada mas alta de Mexico accesible por rio y de abismos verticales de clase mundial.',
     imagenUrl: '/images/aquismon.jpg',
     regionId: 1,
-    region: { id: 1, nombre: 'Huasteca', colorHex: '#166534', descripcion: null },
+    region: { id: 1, nombre: 'Huasteca', colorHex: '#16a34a', descripcion: null },
     atractivos: [
       { id: 1, nombre: 'Cascada de Tamul', descripcion: 'Con 105 metros de altura, es la cascada mas alta de San Luis Potosi. Se forma por la confluencia de los rios Santa Maria y Gallinas sobre el rio Tampaon, cuyas aguas son de un intenso color turquesa. Se accede mediante navegacion en pangas desde las comunidades de La Morena o Tancachitin, con parada intermedia en la Cueva del Agua.', tipo: 'Cascada', estacionalidad: 'Temporada ideal de noviembre a mayo. En verano, las crecientes por lluvias hacen riesgosa la navegacion y pueden impedir el acceso.', acceso: 'Navegacion en panga desde La Morena o Tancachitin. Recorrido fluvial de aproximadamente 45 minutos por el rio Tampaon.', puebloId: 1 },
       { id: 2, nombre: 'Nacimiento de Tambaque', descripcion: 'Conjunto de pozas cristalinas de baja profundidad alimentadas por manantiales subterraneos, rodeadas de vegetacion tropical densa. Ideales para nadar y contemplar la naturaleza.', tipo: 'Manantial', estacionalidad: 'Accesible todo el ano, con mayor afluencia en temporadas calidas.', acceso: 'Carretera pavimentada desde Aquismon, con estacionamiento y senderos senalizados.', puebloId: 1 },
@@ -308,7 +308,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Enclave surrealista en la selva huasteca, donde las esculturas de concreto de Edward James emergen entre la neblina tropical.',
     imagenUrl: '/images/xilitla.jpg',
     regionId: 1,
-    region: { id: 1, nombre: 'Huasteca', colorHex: '#166534', descripcion: null },
+    region: { id: 1, nombre: 'Huasteca', colorHex: '#16a34a', descripcion: null },
     atractivos: [
       { id: 7, nombre: 'Jardin Escultorico de Edward James - Las Pozas', descripcion: '36 estructuras monumentales de concreto inmersas en la selva humeda, creadas por el mecenas britanico Edward James entre 1962 y 1984. Escaleras que no conducen a ninguna parte, columnas con capiteles de flores y puertas que se abren al vacio.', tipo: 'Sitio artistico', estacionalidad: 'Todo el ano. La neblina matutina (noviembre a febrero) otorga una atmosfera dramatica. Controles de capacidad activos.', acceso: 'A 2.5 km del centro de Xilitla por carretera asfaltada.', puebloId: 2 },
       { id: 8, nombre: 'Ex Convento de San Agustin', descripcion: 'Estructura monastica fundada en 1557, la mas antigua del estado. Arquitectura colonial con elementos goticos y renacentistas.', tipo: 'Monumento historico', estacionalidad: 'Todo el ano.', acceso: 'En el centro historico de Xilitla, accesible a pie.', puebloId: 2 },
@@ -339,7 +339,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Pueblo fantasma minero suspendido a 2,700 metros de altitud, accesible unicamente a traves de un tunel del siglo XIX.',
     imagenUrl: '/images/real-de-catorce.jpg',
     regionId: 2,
-    region: { id: 2, nombre: 'Altiplano', colorHex: '#B45309', descripcion: null },
+    region: { id: 2, nombre: 'Altiplano', colorHex: '#eab308', descripcion: null },
     atractivos: [
       { id: 11, nombre: 'Tunel de Ogarrio', descripcion: 'Unico acceso terrestre, un tunel de 2,300 metros perforado en la roca en 1897. Carretera de un solo carril con semaforos.', tipo: 'Monumento historico', estacionalidad: 'Todo el ano. Posibles esperas de 30 minutos.', acceso: 'Vehiculo propio o transporte Willys desde Estacion Catorce.', puebloId: 3 },
       { id: 12, nombre: 'Ruinas de mamposteria - Pueblo Fantasma', descripcion: 'Edificaciones abandonadas del siglo XIX: Palenque de Gallos, Plaza de Toros, Antigua Casa de la Moneda (1815).', tipo: 'Zona arqueologica', estacionalidad: 'Todo el ano.', acceso: 'Recorrido a pie por el pueblo.', puebloId: 3 },
@@ -369,7 +369,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Capital mundial del rebozo mexicano, donde la tradicion textil de cuatro siglos se preserva en telares de cintura.',
     imagenUrl: '/images/santa-maria-del-rio.jpg',
     regionId: 3,
-    region: { id: 3, nombre: 'Centro', colorHex: '#9A3412', descripcion: null },
+    region: { id: 3, nombre: 'Centro', colorHex: '#dc2626', descripcion: null },
     atractivos: [
       { id: 16, nombre: 'Cauce del Rio Santa Maria', descripcion: 'Rio que atraviesa la localidad y da nombre al municipio.', tipo: 'Rio', estacionalidad: 'Mayor caudal en temporada de lluvias (julio a octubre).', acceso: 'Accesible desde multiples puntos del pueblo.', puebloId: 4 },
       { id: 17, nombre: 'Balneario de Aguas Termales de Lourdes', descripcion: 'Manantiales de aguas termales de composicion sulfurosa con propiedades terapeuticas. Temperatura de 36 a 40 grados.', tipo: 'Balneario termal', estacionalidad: 'Todo el ano.', acceso: 'A pocos kilometros del centro por carretera pavimentada.', puebloId: 4 },
@@ -405,7 +405,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Pueblo serrano de canadas profundas y laja roja, donde una iglesia sumergida emerge cuando desciende la presa.',
     imagenUrl: '/images/tierra-nueva.jpg',
     regionId: 3,
-    region: { id: 3, nombre: 'Centro', colorHex: '#9A3412', descripcion: null },
+    region: { id: 3, nombre: 'Centro', colorHex: '#dc2626', descripcion: null },
     atractivos: [
       { id: 22, nombre: 'Presa La Muneca', descripcion: 'Embalse sobre el Rio Jofre con pesca deportiva. En estiaje emergen ruinas sumergidas de la comunidad de Vigas.', tipo: 'Presa', estacionalidad: 'Pesca todo el ano. Ruinas visibles febrero a mayo.', acceso: 'Carretera desde Tierra Nueva, 20 minutos.', puebloId: 5 },
       { id: 23, nombre: 'Cerro La Mesa - Salsipuedes', descripcion: 'Montana con senderos en canadas profundas. Carga historica de la Guerra Cristera.', tipo: 'Senderismo', estacionalidad: 'Otono e invierno. Evitar lluvias por deslizamientos.', acceso: 'Senderos con guia local recomendado.', puebloId: 5 },
@@ -439,7 +439,7 @@ const pueblosCompletos: PuebloMagico[] = [
     descripcionBreve: 'Encrucijada de civilizaciones en la zona media, con manantiales milenarios y cuevas con pinturas rupestres.',
     imagenUrl: '/images/ciudad-del-maiz.jpg',
     regionId: 4,
-    region: { id: 4, nombre: 'Media', colorHex: '#A16207', descripcion: null },
+    region: { id: 4, nombre: 'Media', colorHex: '#ea580c', descripcion: null },
     atractivos: [
       { id: 25, nombre: 'Parroquia de la Purisima Concepcion', descripcion: 'Templo del siglo XVIII neoclasico con restos del Gral. Miguel Barragan y reloj parisino.', tipo: 'Templo', estacionalidad: 'Todo el ano.', acceso: 'Centro historico.', puebloId: 6 },
       { id: 26, nombre: 'Jardin Hidalgo con kiosco afrancesado', descripcion: 'Plaza con kiosco de hierro fundido de estilo afrancesado del Porfiriato.', tipo: 'Plaza', estacionalidad: 'Todo el ano.', acceso: 'Centro de Ciudad del Maiz.', puebloId: 6 },
