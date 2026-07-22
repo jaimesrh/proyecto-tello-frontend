@@ -60,6 +60,7 @@ export interface Atractivo {
   estacionalidad: string | null;
   acceso: string | null;
   puebloId: number;
+  imagenUrl?: string | null;
 }
 
 export interface Cultura {

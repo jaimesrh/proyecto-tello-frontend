@@ -17,7 +17,16 @@ export default function TabAtractivos({ atractivos }: TabAtractivosProps) {
   return (
     <div className="space-y-6">
       {atractivos.map((atractivo, index) => (
-        <div key={index} className="glass-panel p-6">
+        <div key={index} className="glass-panel p-6 overflow-hidden">
+          {atractivo.imagenUrl && (
+            <div className="relative w-full h-48 sm:h-64 mb-6 rounded-2xl overflow-hidden shadow-md bg-stone-100 dark:bg-stone-800">
+              <img 
+                src={atractivo.imagenUrl} 
+                alt={atractivo.nombre} 
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
+              />
+            </div>
+          )}
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
             <h3 className="text-xl font-bold">{atractivo.nombre}</h3>
             <span className="px-3 py-1 bg-stone-200/50 dark:bg-stone-700/50 text-stone-600 dark:text-stone-300 rounded-full text-xs font-semibold whitespace-nowrap">
