@@ -35,10 +35,10 @@ const regionPaths: Record<string, { path: string; labelX: number; labelY: number
 };
 
 const regionColors: Record<string, { fill: string; hover: string; text: string; bg: string }> = {
-  Huasteca: { fill: '#2d6a4f', hover: '#40916c', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
-  Altiplano: { fill: '#9a5b27', hover: '#b86f32', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
-  Centro: { fill: '#8c3f2b', hover: '#a84c34', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
-  Media: { fill: '#8c6829', hover: '#a87d32', text: 'text-media dark:text-media', bg: 'bg-media' },
+  Huasteca: { fill: '#237a4b', hover: '#2ea063', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
+  Altiplano: { fill: '#c47b2b', hover: '#db8e35', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
+  Centro: { fill: '#b84a2b', hover: '#d45837', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
+  Media: { fill: '#b88a28', hover: '#d4a133', text: 'text-media dark:text-media', bg: 'bg-media' },
 };
 
 type LayerType = 'PUEBLOS_MAGICOS' | 'PARAJES_HIDROLOGICOS';
@@ -132,10 +132,10 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                     <path
                       d={pathData.path}
                       fill={isActive || isHovered ? colors.hover : colors.fill}
-                      fillOpacity={isActive ? 0.75 : isHovered ? 0.55 : 0.35}
-                      stroke={isActive || isHovered ? colors.hover : colors.fill}
-                      strokeOpacity={isActive ? 0.9 : 0.4}
-                      strokeWidth={isActive ? 2.5 : 1}
+                      fillOpacity={isActive ? 0.85 : isHovered ? 0.7 : 0.55}
+                      stroke={isActive ? '#ffffff' : colors.hover}
+                      strokeOpacity={isActive ? 0.9 : 0.5}
+                      strokeWidth={isActive ? 2 : 1.2}
                       strokeLinejoin="round"
                       strokeLinecap="round"
                       className="cursor-pointer transition-all duration-300"
