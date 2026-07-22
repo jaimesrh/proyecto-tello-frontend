@@ -35,10 +35,10 @@ const regionPaths: Record<string, { path: string; labelX: number; labelY: number
 };
 
 const regionColors: Record<string, { fill: string; hover: string; text: string; bg: string }> = {
-  Huasteca: { fill: '#166534', hover: '#15803d', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
-  Altiplano: { fill: '#B45309', hover: '#D97706', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
-  Centro: { fill: '#9A3412', hover: '#C2410C', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
-  Media: { fill: '#A16207', hover: '#CA8A04', text: 'text-media dark:text-media', bg: 'bg-media' },
+  Huasteca: { fill: '#2d6a4f', hover: '#40916c', text: 'text-huasteca dark:text-huasteca', bg: 'bg-huasteca' },
+  Altiplano: { fill: '#9a5b27', hover: '#b86f32', text: 'text-altiplano dark:text-altiplano', bg: 'bg-altiplano' },
+  Centro: { fill: '#8c3f2b', hover: '#a84c34', text: 'text-centro dark:text-centro', bg: 'bg-centro' },
+  Media: { fill: '#8c6829', hover: '#a87d32', text: 'text-media dark:text-media', bg: 'bg-media' },
 };
 
 type LayerType = 'PUEBLOS_MAGICOS' | 'PARAJES_HIDROLOGICOS';
@@ -132,9 +132,10 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                     <path
                       d={pathData.path}
                       fill={isActive || isHovered ? colors.hover : colors.fill}
-                      fillOpacity={isActive ? 0.95 : isHovered ? 0.8 : 0.6}
+                      fillOpacity={isActive ? 0.75 : isHovered ? 0.55 : 0.35}
                       stroke={isActive || isHovered ? colors.hover : colors.fill}
-                      strokeWidth={isActive ? 3 : 1.5}
+                      strokeOpacity={isActive ? 0.9 : 0.4}
+                      strokeWidth={isActive ? 2.5 : 1}
                       strokeLinejoin="round"
                       strokeLinecap="round"
                       className="cursor-pointer transition-all duration-300"
