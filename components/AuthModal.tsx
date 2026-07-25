@@ -57,26 +57,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white/95 shadow-2xl backdrop-blur-md dark:bg-surface-800/95"
+          transition={{ duration: 0.2 }}
+          className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-white dark:bg-surface-900 shadow-2xl border border-surface-200 dark:border-surface-800"
         >
           {/* Header Gradient */}
-          <div className="h-2 w-full bg-gradient-to-r from-huasteca-400 via-centro-500 to-altiplano-400" />
+          <div className="h-2 w-full bg-gradient-to-r from-emerald-600 via-amber-600 to-amber-800" />
 
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 text-surface-500 hover:text-surface-800 dark:hover:text-surface-100 transition-colors text-xl"
+            className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-surface-100 text-surface-500 hover:bg-surface-200 hover:text-surface-900 dark:bg-surface-800 dark:text-surface-300 dark:hover:bg-surface-700 dark:hover:text-white transition-colors"
           >
             ✕
           </button>
 
-          <div className="p-8">
-            <h2 className="mb-1 text-center font-serif text-3xl font-bold text-surface-900 dark:text-surface-50">
+          <div className="p-6 sm:p-8">
+            <h2 className="mb-1 text-center font-display text-2xl sm:text-3xl font-bold text-surface-900 dark:text-white">
               Conoce San Luis Potosí
             </h2>
             <p className="text-center text-sm text-surface-500 dark:text-surface-400 mb-6">
@@ -84,14 +84,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </p>
 
             {/* Tabs */}
-            <div className="mb-6 flex rounded-lg bg-surface-100 p-1 dark:bg-surface-700">
+            <div className="mb-6 flex rounded-xl bg-surface-100 p-1 dark:bg-surface-800">
               {(['login', 'signup'] as const).map((t) => (
                 <button
                   key={t}
-                  className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${
+                  type="button"
+                  className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all ${
                     tab === t
-                      ? 'bg-white text-centro-600 shadow-sm dark:bg-surface-800 dark:text-centro-400'
-                      : 'text-surface-500 dark:text-surface-300'
+                      ? 'bg-white text-amber-700 shadow-sm dark:bg-surface-700 dark:text-amber-400'
+                      : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white'
                   }`}
                   onClick={() => handleTabChange(t)}
                 >
@@ -105,7 +106,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300"
+                className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300"
               >
                 {error}
               </motion.div>
@@ -114,7 +115,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {tab === 'signup' && (
                 <div>
-                  <label className="block text-sm font-medium text-surface-700 dark:text-surface-300">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300 mb-1">
                     Nombre completo
                   </label>
                   <input
@@ -123,13 +124,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     placeholder="Tu nombre"
-                    className="mt-1 block w-full rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-centro-500 focus:outline-none focus:ring-2 focus:ring-centro-500/20 dark:border-surface-600 dark:bg-surface-700 dark:text-white"
+                    className="w-full rounded-xl border border-surface-300 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-600/20 dark:border-surface-700 dark:bg-surface-800 dark:text-white dark:placeholder-surface-500"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-medium text-surface-700 dark:text-surface-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300 mb-1">
                   Correo electrónico
                 </label>
                 <input
@@ -138,12 +139,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="correo@ejemplo.com"
-                  className="mt-1 block w-full rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-centro-500 focus:outline-none focus:ring-2 focus:ring-centro-500/20 dark:border-surface-600 dark:bg-surface-700 dark:text-white"
+                  className="w-full rounded-xl border border-surface-300 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-600/20 dark:border-surface-700 dark:bg-surface-800 dark:text-white dark:placeholder-surface-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-surface-700 dark:text-surface-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300 mb-1">
                   Contraseña
                 </label>
                 <input
@@ -153,14 +154,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres"
-                  className="mt-1 block w-full rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-centro-500 focus:outline-none focus:ring-2 focus:ring-centro-500/20 dark:border-surface-600 dark:bg-surface-700 dark:text-white"
+                  className="w-full rounded-xl border border-surface-300 bg-white px-4 py-2.5 text-surface-900 placeholder-surface-400 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-600/20 dark:border-surface-700 dark:bg-surface-800 dark:text-white dark:placeholder-surface-500"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="mt-2 w-full rounded-xl bg-centro-600 py-3 text-sm font-semibold text-white transition-all hover:bg-centro-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="mt-2 w-full rounded-xl bg-amber-700 py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-amber-800 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {submitting ? 'Procesando...' : tab === 'login' ? 'Ingresar' : 'Registrarse'}
               </button>
@@ -168,19 +169,20 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             {/* Divider */}
             <div className="my-5 flex items-center gap-3">
-              <div className="flex-1 h-px bg-surface-200 dark:bg-surface-600" />
-              <span className="text-xs text-surface-400">o continúa con</span>
-              <div className="flex-1 h-px bg-surface-200 dark:bg-surface-600" />
+              <div className="flex-1 h-px bg-surface-200 dark:bg-surface-700" />
+              <span className="text-xs font-medium text-surface-500 dark:text-surface-400">o continúa con</span>
+              <div className="flex-1 h-px bg-surface-200 dark:bg-surface-700" />
             </div>
 
             {/* Google Sign-In */}
             <button
+              type="button"
               onClick={handleGoogle}
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-3 rounded-xl border border-surface-200 bg-white py-3 text-sm font-semibold text-surface-700 transition-all hover:bg-surface-50 hover:shadow-sm dark:border-surface-600 dark:bg-surface-700 dark:text-surface-200 dark:hover:bg-surface-600 disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-3 rounded-xl border border-surface-300 bg-white dark:bg-surface-800 py-3 text-sm font-semibold text-surface-800 dark:text-white transition-all hover:bg-surface-50 dark:hover:bg-surface-700 hover:shadow-sm active:scale-[0.99] disabled:opacity-60"
             >
-              <FcGoogle className="w-5 h-5" />
-              Continuar con Google
+              <FcGoogle className="w-5 h-5 shrink-0" />
+              <span>Continuar con Google</span>
             </button>
           </div>
         </motion.div>
