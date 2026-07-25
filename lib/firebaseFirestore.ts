@@ -73,12 +73,12 @@ export async function getReservaciones(userId: string): Promise<Reservacion[]> {
   const colRef = collection(db, 'reservaciones');
   const q = query(
     colRef,
-    where('userId', '==', userId),
-    where('estado', '==', 'confirmada'),
-    orderBy('creadoEn', 'desc')
+    where('userId', '==', userId)
   );
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Reservacion));
+  return snapshot.docs
+    .map((d) => ({ id: d.id, ...d.data() } as Reservacion))
+    .filter((r) => r.estado === 'confirmada');
 }
 
 export async function cancelReservacion(reservaId: string): Promise<void> {
