@@ -416,9 +416,9 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 24, nombre: 'Parroquia de San Nicolas Tolentino', descripcion: 'Notable por sus tres torres campanario asimetricas, una rareza arquitectonica en la region.', tipo: 'Templo', estacionalidad: 'Todo el ano.', acceso: 'Centro de Tierra Nueva.', puebloId: 5, imagenUrl: '/images/atractivos/parroquia-tierra-nueva.jpg' },
     ],
     culturas: [
-      { id: 13, tipo: 'Festividad', nombre: 'Fiestas patronales de San Nicolas', descripcion: 'Del 1 al 10 de septiembre con procesiones, danzas, musica de banda y pirotecnia.', puebloId: 5, imagenUrl: '/images/tierra-nueva.jpg' },
+      { id: 13, tipo: 'Festividad', nombre: 'Fiestas patronales de San Nicolas', descripcion: 'Del 1 al 10 de septiembre con procesiones, danzas, musica de banda y pirotecnia.', puebloId: 5, imagenUrl: '/images/atractivos/parroquia-tierra-nueva.jpg' },
       { id: 14, tipo: 'Gastronomia', nombre: 'Melcocha de Tuna', descripcion: 'Dulce elaborado estirando jarabe de tuna cocido hasta obtener textura fibrosa y cristalina.', puebloId: 5, imagenUrl: '/images/gastronomia/queso-de-tuna.jpg' },
-      { id: 15, tipo: 'Artesania', nombre: 'Laja roja y sombreros de palma', descripcion: 'La laja roja "sangre de pichon" es piedra ornamental local. Sombreros de palma artesanales de exportacion.', puebloId: 5, imagenUrl: '/images/tierra_nueva_1783034418859.png' },
+      { id: 15, tipo: 'Artesania', nombre: 'Laja roja y sombreros de palma', descripcion: 'La laja roja "sangre de pichon" es piedra ornamental local. Sombreros de palma artesanales de exportacion.', puebloId: 5, imagenUrl: '/images/tierra-nueva.jpg' },
     ],
     sostenibilidad: {
       id: 5,
@@ -453,8 +453,8 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 32, nombre: 'Cascadas de Minas Viejas', descripcion: 'Caida de agua de 35 metros en anfiteatro natural, en el municipio vecino de El Naranjo.', tipo: 'Cascada', estacionalidad: 'Mayor espectacularidad julio a octubre.', acceso: 'Carretera Ciudad del Maiz - El Naranjo.', puebloId: 6, imagenUrl: '/images/parajes/cascadas-minas-viejas.png' },
     ],
     culturas: [
-      { id: 16, tipo: 'Gastronomia', nombre: 'Guiso borracho', descripcion: 'Platillo tradicional a base de pulque, carnes mixtas y vegetales en coccion lenta.', puebloId: 6, imagenUrl: '/images/ciudad-del-maiz.jpg' },
-      { id: 17, tipo: 'Festividad', nombre: 'Festividad del Senor del Salitre', descripcion: 'Celebracion principal entre julio y agosto con procesiones, danzas Xi\'iuy y feria popular.', puebloId: 6, imagenUrl: '/images/ciudad_del_maiz_1783034432060.png' },
+      { id: 16, tipo: 'Gastronomia', nombre: 'Guiso borracho', descripcion: 'Platillo tradicional a base de pulque, carnes mixtas y vegetales en coccion lenta.', puebloId: 6, imagenUrl: '/images/asado_de_boda.png' },
+      { id: 17, tipo: 'Festividad', nombre: 'Festividad del Senor del Salitre', descripcion: 'Celebracion principal entre julio y agosto con procesiones, danzas Xi\'iuy y feria popular.', puebloId: 6, imagenUrl: '/images/atractivos/parroquia-ciudad-maiz.jpg' },
     ],
     sostenibilidad: {
       id: 6,
