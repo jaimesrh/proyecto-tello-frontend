@@ -6,10 +6,15 @@ import { MapPin, BarChart3, Sun, Moon, Menu, X, ChevronDown, Compass, Camera, Ca
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import SearchBar from './SearchBar';
+import NotificationCenter from './NotificationCenter';
+import AuthModal from './AuthModal';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const { isDark, toggleDarkMode, mounted } = useDarkMode();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-surface-50/80 dark:bg-surface-900/80 backdrop-blur-xl border-b border-surface-200/50 dark:border-surface-800/50">
@@ -66,10 +71,40 @@ export default function Navbar() {
                 </div>
               </div>
 
+              <Link href="/tours" className="text-sm font-medium text-surface-900/70 dark:text-surface-50/70 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                Tours
+              </Link>
+
+              <Link href="/agenda" className="text-sm font-medium text-surface-900/70 dark:text-surface-50/70 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                Mi Agenda
+              </Link>
+
               <Link href="/descubre" className="px-4 py-1.5 bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-500 rounded-full text-sm font-medium transition-colors shadow-sm">
                 Descubre tu destino
               </Link>
             </div>
+
+            {/* Auth y Notificaciones */}
+            {mounted && (
+              <div className="flex items-center gap-2">
+                <NotificationCenter />
+                {user ? (
+                  <Link
+                    href="/perfil"
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-centro-100 text-sm font-bold text-centro-700 hover:bg-centro-200 dark:bg-centro-900/50 dark:text-centro-300 dark:hover:bg-centro-800 transition-colors"
+                  >
+                    {user.nombre.charAt(0).toUpperCase()}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => setAuthModalOpen(true)}
+                    className="px-3 py-1.5 text-sm font-medium text-centro-700 hover:bg-centro-50 dark:text-centro-400 dark:hover:bg-surface-800 rounded-lg transition-colors"
+                  >
+                    Ingresar
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Toggle Dark Mode */}
             {mounted && (
@@ -135,6 +170,12 @@ export default function Navbar() {
               <Link href="/calendario" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <CalendarDays className="w-5 h-5 text-purple-500" /> Calendario de Eventos
               </Link>
+              <Link href="/tours" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
+                <Compass className="w-5 h-5 text-amber-600" /> Catálogo de Tours
+              </Link>
+              <Link href="/agenda" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
+                <CalendarDays className="w-5 h-5 text-purple-600" /> Mi Agenda de Tours
+              </Link>
               <Link href="/eco-guia" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <Leaf className="w-5 h-5 text-green-500" /> Guía de Eco-Turismo
               </Link>
@@ -145,6 +186,7 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </nav>
   );
 }

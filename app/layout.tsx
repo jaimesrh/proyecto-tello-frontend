@@ -3,6 +3,7 @@ import { Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { AuthProvider } from '@/context/AuthContext';
 
 const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', axes: ['SOFT', 'WONK'] });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -20,13 +21,15 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${fraunces.variable} ${inter.variable} font-sans antialiased bg-surface-50 text-surface-900 dark:bg-surface-900 dark:text-surface-50 transition-colors duration-500`}>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow pt-16">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow pt-16">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
