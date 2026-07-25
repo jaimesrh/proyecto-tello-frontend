@@ -37,8 +37,15 @@ export default function GastronomiaPage() {
                   alt={platillo.nombre} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold tracking-wider uppercase">
-                  {platillo.region}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  {platillo.pueblo && (
+                    <div className="bg-amber-600/90 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold tracking-wider">
+                      {platillo.pueblo}
+                    </div>
+                  )}
+                  <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold tracking-wider uppercase">
+                    {platillo.region}
+                  </div>
                 </div>
               </div>
               
