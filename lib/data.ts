@@ -282,10 +282,10 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 6, nombre: 'Iglesia de San Miguel Arcangel en Tamapatz', descripcion: 'Templo historico con singular fusion arquitectonica de influencia arabe construida sobre un basamento de origen huasteco.', tipo: 'Monumento historico', estacionalidad: 'Todo el ano.', acceso: 'Carretera desde Aquismon hasta la comunidad de Tamapatz.', puebloId: 1, imagenUrl: '/images/atractivos/iglesia-tamapatz.png' },
     ],
     culturas: [
-      { id: 1, tipo: 'Gastronomia', nombre: 'Zacahuil', descripcion: 'Tamal gigante de masa de maiz con chile ancho y carne de cerdo o guajolote, envuelto en hojas de platano y cocido en horno de lena durante toda la noche.', puebloId: 1 },
-      { id: 2, tipo: 'Gastronomia', nombre: 'Bocoles', descripcion: 'Gorditas de maiz gruesas rellenas de frijol, queso o chicharron, fritas y servidas con salsa.', puebloId: 1 },
-      { id: 3, tipo: 'Gastronomia', nombre: 'Enchiladas huastecas con cecina', descripcion: 'Tortillas banadas en salsa de chile seco rellenas de queso fresco, acompanadas de cecina curada al sol.', puebloId: 1 },
-      { id: 4, tipo: 'Artesania', nombre: 'Textiles de arte Tenek', descripcion: 'Tejidos artesanales elaborados por mujeres de la etnia Tenek: morrales, fajas ceremoniales y quexquemitls con bordados simbolicos.', puebloId: 1 },
+      { id: 1, tipo: 'Gastronomia', nombre: 'Zacahuil Huasteco', descripcion: 'Tamal gigante de masa de maiz con chile ancho y carne de cerdo o guajolote, envuelto en hojas de platano y cocido en horno de lena durante toda la noche.', puebloId: 1, imagenUrl: '/images/zacahuil_1784665862653.png' },
+      { id: 2, tipo: 'Gastronomia', nombre: 'Bocoles', descripcion: 'Gorditas de maiz gruesas rellenas de frijol, queso o chicharron, fritas y servidas con salsa.', puebloId: 1, imagenUrl: '/images/bocoles.png' },
+      { id: 3, tipo: 'Gastronomia', nombre: 'Vino de Jobo', descripcion: 'Bebida fermentada agridulce tradicional elaborada a partir del fruto de jobo y piloncillo.', puebloId: 1, imagenUrl: '/images/gastronomia/vino-de-jobo.jpg' },
+      { id: 4, tipo: 'Artesania', nombre: 'Textiles de arte Tenek', descripcion: 'Tejidos artesanales elaborados por mujeres de la etnia Tenek: morrales, fajas ceremoniales y quexquemitls con bordados simbolicos.', puebloId: 1, imagenUrl: '/images/aquismon.jpg' },
     ],
     sostenibilidad: {
       id: 1,
@@ -316,7 +316,8 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 10, nombre: 'Castillo de la Salud en Axtla de Terrazas', descripcion: 'Edificacion de Beto Ramon dedicada a la medicina tradicional y herbolaria.', tipo: 'Sitio cultural', estacionalidad: 'Todo el ano.', acceso: 'En Axtla de Terrazas, a 45 minutos de Xilitla.', puebloId: 2, imagenUrl: '/images/atractivos/castillo-la-salud.png' },
     ],
     culturas: [
-      { id: 5, tipo: 'Gastronomia', nombre: 'Cafe organico de altura', descripcion: 'Cafe cultivado bajo sombra entre los 600 y 1,000 msnm. Proceso artesanal de secado al sol y tostado en comal con notas achocolatadas y citricas.', puebloId: 2 },
+      { id: 5, tipo: 'Gastronomia', nombre: 'Cafe organico de altura', descripcion: 'Cafe cultivado bajo sombra entre los 600 y 1,000 msnm. Proceso artesanal de secado al sol y tostado en comal con notas achocolatadas y citricas.', puebloId: 2, imagenUrl: '/images/gastronomia/cafe-altura-xilitla.jpg' },
+      { id: 6, tipo: 'Gastronomia', nombre: 'Pan de Queso de Xilitla', descripcion: 'Pan dulce artesanal horneado a la lena relleno de queso fresco criollo.', puebloId: 2, imagenUrl: '/images/gastronomia/pan-de-queso-xilitla.jpg' },
     ],
     sostenibilidad: {
       id: 2,
@@ -347,7 +348,11 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 14, nombre: 'Area Natural Protegida de Wirikuta y Cerro del Quemado', descripcion: 'Territorio sagrado Wixarika de 140,000 hectareas. Cerro del Quemado: sitio ceremonial para la comunion ritual con el hikuri (peyote).', tipo: 'Area natural protegida', estacionalidad: 'Todo el ano. Respetar periodos de peregrinacion Wixarika (febrero a marzo).', acceso: 'Vehiculos todoterreno Willys.', puebloId: 3, imagenUrl: '/images/parajes/desierto-sagrado-wirikuta.png' },
       { id: 15, nombre: 'Recorridos en Willys y Ex Hacienda Laguna Seca', descripcion: 'Excursiones en vehiculos Willys hacia Estacion Catorce y la Ex Hacienda Laguna Seca con destilacion de mezcal tradicional.', tipo: 'Recorrido', estacionalidad: 'Todo el ano.', acceso: 'Contratacion de Willys con conductor local.', puebloId: 3, imagenUrl: '/images/atractivos/willys-catorce.png' },
     ],
-    culturas: [],
+    culturas: [
+      { id: 7, tipo: 'Gastronomia', nombre: 'Asado de Boda', descripcion: 'Guiso espeso tradicional del altiplano preparado con carne de cerdo en mole de chiles secos, naranja y chocolate.', puebloId: 3, imagenUrl: '/images/asado_de_boda.png' },
+      { id: 8, tipo: 'Gastronomia', nombre: 'Queso de Tuna', descripcion: 'Dulce ancestral denso de tuna cardona concentrada durante horas hasta tomar consistencia firme.', puebloId: 3, imagenUrl: '/images/gastronomia/queso-de-tuna.jpg' },
+      { id: 9, tipo: 'Gastronomia', nombre: 'Colonche del Altiplano', descripcion: 'Bebida silvestre efervescente de color rojo rubi producto de la fermentacion natural de la tuna roja.', puebloId: 3, imagenUrl: '/images/gastronomia/colonche.jpg' },
+    ],
     sostenibilidad: {
       id: 3,
       capacidadCarga: 'El Tunel de Ogarrio limita naturalmente el flujo vehicular. Las calles del siglo XIX no soportan trafico masivo.',
@@ -379,10 +384,9 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 21, nombre: 'Haciendas historicas', descripcion: 'Haciendas coloniales: Lourdes, Villa Quemada, Badillo y Labor del Rio.', tipo: 'Patrimonio historico', estacionalidad: 'Todo el ano. Algunas son propiedad privada.', acceso: 'Caminos rurales en los alrededores.', puebloId: 4, imagenUrl: '/images/atractivos/haciendas-santa-maria.png' },
     ],
     culturas: [
-      { id: 6, tipo: 'Artesania', nombre: 'Escuela-Museo Casa del Rebozo', descripcion: 'Institucion dedicada a la preservacion del rebozo en telar de cintura con tecnica del ikat.', puebloId: 4 },
-      { id: 7, tipo: 'Gastronomia', nombre: 'Asado de boda', descripcion: 'Carne de cerdo en salsa de chiles secos con especias, chocolate y frutas. Platillo ceremonial.', puebloId: 4 },
-      { id: 8, tipo: 'Gastronomia', nombre: 'Gorditas y carnitas', descripcion: 'Gorditas de maiz rellenas con carnitas de cerdo fritas en manteca, con nopalitos.', puebloId: 4 },
-      { id: 9, tipo: 'Gastronomia', nombre: 'Queso de tuna y campechanas', descripcion: 'Dulce artesanal de tuna cocido hasta pasta solida. Campechanas: hojaldre dulce crujiente.', puebloId: 4 },
+      { id: 10, tipo: 'Artesania', nombre: 'Escuela-Museo Casa del Rebozo', descripcion: 'Institucion dedicada a la preservacion del rebozo en telar de cintura con tecnica del ikat.', puebloId: 4, imagenUrl: '/images/santa-maria-del-rio.jpg' },
+      { id: 11, tipo: 'Gastronomia', nombre: 'Asado de boda', descripcion: 'Carne de cerdo en salsa de chiles secos con especias, chocolate y frutas. Platillo ceremonial.', puebloId: 4, imagenUrl: '/images/asado_de_boda.png' },
+      { id: 12, tipo: 'Gastronomia', nombre: 'Campechanas y Dulces de Tuna', descripcion: 'Campechanas de hojaldre crujiente caramelizado y dulce de queso de tuna artesanal.', puebloId: 4, imagenUrl: '/images/gastronomia/campechanas.jpg' },
     ],
     sostenibilidad: {
       id: 4,
@@ -412,11 +416,9 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 24, nombre: 'Parroquia de San Nicolas Tolentino', descripcion: 'Notable por sus tres torres campanario asimetricas, una rareza arquitectonica en la region.', tipo: 'Templo', estacionalidad: 'Todo el ano.', acceso: 'Centro de Tierra Nueva.', puebloId: 5, imagenUrl: '/images/atractivos/parroquia-tierra-nueva.jpg' },
     ],
     culturas: [
-      { id: 10, tipo: 'Festividad', nombre: 'Fiestas patronales', descripcion: 'Del 1 al 10 de septiembre con procesiones, danzas, musica de banda y pirotecnia.', puebloId: 5 },
-      { id: 11, tipo: 'Gastronomia', nombre: 'Barbacoa tradicional', descripcion: 'Carne cocida en horno de tierra con pencas de maguey toda la noche.', puebloId: 5 },
-      { id: 12, tipo: 'Gastronomia', nombre: 'Gorditas de garbanzo', descripcion: 'Gorditas rellenas de garbanzo guisado con chiles secos, especialidad unica local.', puebloId: 5 },
-      { id: 13, tipo: 'Gastronomia', nombre: 'Melcocha de tuna', descripcion: 'Dulce elaborado estirando jarabe de tuna cocido hasta obtener textura fibrosa y cristalina.', puebloId: 5 },
-      { id: 14, tipo: 'Artesania', nombre: 'Laja roja y sombreros de palma', descripcion: 'La laja roja "sangre de pichon" es piedra ornamental local. Sombreros de palma artesanales de exportacion.', puebloId: 5 },
+      { id: 13, tipo: 'Festividad', nombre: 'Fiestas patronales de San Nicolas', descripcion: 'Del 1 al 10 de septiembre con procesiones, danzas, musica de banda y pirotecnia.', puebloId: 5, imagenUrl: '/images/tierra-nueva.jpg' },
+      { id: 14, tipo: 'Gastronomia', nombre: 'Melcocha de Tuna', descripcion: 'Dulce elaborado estirando jarabe de tuna cocido hasta obtener textura fibrosa y cristalina.', puebloId: 5, imagenUrl: '/images/gastronomia/queso-de-tuna.jpg' },
+      { id: 15, tipo: 'Artesania', nombre: 'Laja roja y sombreros de palma', descripcion: 'La laja roja "sangre de pichon" es piedra ornamental local. Sombreros de palma artesanales de exportacion.', puebloId: 5, imagenUrl: '/images/tierra_nueva_1783034418859.png' },
     ],
     sostenibilidad: {
       id: 5,
@@ -451,8 +453,8 @@ const pueblosCompletos: PuebloMagico[] = [
       { id: 32, nombre: 'Cascadas de Minas Viejas', descripcion: 'Caida de agua de 35 metros en anfiteatro natural, en el municipio vecino de El Naranjo.', tipo: 'Cascada', estacionalidad: 'Mayor espectacularidad julio a octubre.', acceso: 'Carretera Ciudad del Maiz - El Naranjo.', puebloId: 6, imagenUrl: '/images/parajes/cascadas-minas-viejas.png' },
     ],
     culturas: [
-      { id: 15, tipo: 'Gastronomia', nombre: 'Guiso borracho', descripcion: 'Platillo a base de pulque, carnes y vegetales en guiso lento con sabores fermentados.', puebloId: 6 },
-      { id: 16, tipo: 'Festividad', nombre: 'Festividad del Senor del Salitre', descripcion: 'Celebracion principal entre julio y agosto con procesiones, danzas Xi\'iuy y feria popular.', puebloId: 6 },
+      { id: 16, tipo: 'Gastronomia', nombre: 'Guiso borracho', descripcion: 'Platillo tradicional a base de pulque, carnes mixtas y vegetales en coccion lenta.', puebloId: 6, imagenUrl: '/images/ciudad-del-maiz.jpg' },
+      { id: 17, tipo: 'Festividad', nombre: 'Festividad del Senor del Salitre', descripcion: 'Celebracion principal entre julio y agosto con procesiones, danzas Xi\'iuy y feria popular.', puebloId: 6, imagenUrl: '/images/ciudad_del_maiz_1783034432060.png' },
     ],
     sostenibilidad: {
       id: 6,

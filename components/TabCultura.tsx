@@ -51,11 +51,22 @@ export default function TabCultura({ culturas }: TabCulturaProps) {
 
           <div className="grid sm:grid-cols-2 gap-4">
             {items.map((item, index) => (
-              <div key={index} className="glass-panel p-5 border-l-4 border-l-stone-300 dark:border-l-stone-600">
-                <h4 className="font-semibold text-lg mb-2">{item.nombre}</h4>
-                <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
-                  {item.descripcion}
-                </p>
+              <div key={index} className="glass-panel p-5 border-l-4 border-l-stone-300 dark:border-l-stone-600 flex flex-col justify-between overflow-hidden">
+                <div>
+                  {item.imagenUrl && (
+                    <div className="relative w-full h-44 mb-4 rounded-xl overflow-hidden shadow-sm bg-stone-100 dark:bg-stone-800">
+                      <img 
+                        src={item.imagenUrl} 
+                        alt={item.nombre} 
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
+                      />
+                    </div>
+                  )}
+                  <h4 className="font-semibold text-lg mb-2">{item.nombre}</h4>
+                  <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+                    {item.descripcion}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

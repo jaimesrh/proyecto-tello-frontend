@@ -69,6 +69,7 @@ export interface Cultura {
   nombre: string;
   descripcion: string;
   puebloId: number;
+  imagenUrl?: string | null;
 }
 
 export interface Sostenibilidad {
