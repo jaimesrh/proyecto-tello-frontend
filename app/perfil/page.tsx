@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useAuth, Region } from "../../context/AuthContext";
-import { motion } from "framer-motion";
-import { LogOut, MapPin, Bell, Compass } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useAuth, Region } from '../../context/AuthContext';
+import { motion } from 'framer-motion';
+import { LogOut, MapPin, Bell, Compass } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function PerfilPage() {
-  const { user, logout, updatePreferences, markNotificationsAsRead } = useAuth();
+  const { user, logout, updatePreferences } = useAuth();
   const router = useRouter();
-  const [selectedRegion, setSelectedRegion] = useState<Region>(user?.regionFavorita || "");
-  const [saveMessage, setSaveMessage] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState<Region>(user?.regionFavorita || '');
+  const [saveMessage, setSaveMessage] = useState('');
 
   if (!user) {
     return (
@@ -20,21 +20,21 @@ export default function PerfilPage() {
           Inicia sesión para ver tu perfil
         </h1>
         <p className="text-surface-600 dark:text-surface-400">
-          Usa el botón "Ingresar" en el menú principal.
+          Usa el botón &quot;Ingresar&quot; en el menú principal.
         </p>
       </div>
     );
   }
 
-  const handleSavePreferences = () => {
-    updatePreferences(selectedRegion);
-    setSaveMessage("¡Preferencias actualizadas! Ahora verás eventos de esta región.");
-    setTimeout(() => setSaveMessage(""), 3000);
+  const handleSavePreferences = async () => {
+    await updatePreferences(selectedRegion);
+    setSaveMessage('¡Preferencias actualizadas! Ahora verás eventos de esta región.');
+    setTimeout(() => setSaveMessage(''), 3000);
   };
 
-  const handleLogout = () => {
-    logout();
-    router.push("/");
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
   };
 
   return (
@@ -49,7 +49,7 @@ export default function PerfilPage() {
             Hola, {user.nombre}
           </h1>
           <p className="mt-2 text-surface-600 dark:text-surface-400">
-            Gestiona tus preferencias, notificaciones e itinerarios.
+            Gestiona tus preferencias e itinerarios de viaje.
           </p>
         </div>
         <button
@@ -78,13 +78,13 @@ export default function PerfilPage() {
               Selecciona tu región preferida para recibir recomendaciones personalizadas y notificaciones de eventos.
             </p>
             <div className="space-y-3">
-              {(["Huasteca", "Centro", "Altiplano", "Media"] as Region[]).map((region) => (
+              {(['Huasteca', 'Centro', 'Altiplano', 'Media'] as Region[]).map((region) => (
                 <label
                   key={region}
                   className={`flex cursor-pointer items-center justify-between rounded-xl border p-3 transition-colors ${
                     selectedRegion === region
-                      ? "border-centro-500 bg-centro-50 dark:border-centro-500 dark:bg-centro-900/20"
-                      : "border-surface-200 hover:border-surface-300 dark:border-surface-700 dark:hover:border-surface-600"
+                      ? 'border-centro-500 bg-centro-50 dark:border-centro-500 dark:bg-centro-900/20'
+                      : 'border-surface-200 hover:border-surface-300 dark:border-surface-700 dark:hover:border-surface-600'
                   }`}
                 >
                   <span className="text-sm font-medium text-surface-900 dark:text-surface-100">{region}</span>
@@ -111,60 +111,28 @@ export default function PerfilPage() {
               </p>
             )}
           </motion.div>
-        </div>
 
-        {/* Columna Derecha: Notificaciones e Itinerarios */}
-        <div className="col-span-1 space-y-8 md:col-span-2">
-          {/* Notificaciones */}
+          {/* Cuenta */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.15 }}
             className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-surface-200 dark:bg-surface-800 dark:ring-surface-700"
           >
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                <Bell className="h-5 w-5" />
-                <h2 className="font-semibold text-surface-900 dark:text-surface-50">Notificaciones Activas</h2>
-              </div>
-              <button
-                onClick={markNotificationsAsRead}
-                className="text-sm font-medium text-centro-600 hover:text-centro-700 dark:text-centro-400"
-              >
-                Marcar todas leídas
-              </button>
+            <div className="mb-4 flex items-center gap-2 text-blue-600 dark:text-blue-400">
+              <Bell className="h-5 w-5" />
+              <h2 className="font-semibold text-surface-900 dark:text-surface-50">Mi Cuenta</h2>
             </div>
-            
-            {user.notificaciones.length === 0 ? (
-              <p className="text-sm text-surface-500 dark:text-surface-400">No tienes notificaciones pendientes.</p>
-            ) : (
-              <div className="space-y-4">
-                {user.notificaciones.map((n) => (
-                  <div
-                    key={n.id}
-                    className={`flex items-start gap-4 rounded-xl p-4 transition-colors ${
-                      n.read ? "bg-surface-50 dark:bg-surface-900/50" : "bg-blue-50 dark:bg-blue-900/10 ring-1 ring-blue-100 dark:ring-blue-900/30"
-                    }`}
-                  >
-                    {!n.read && <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" />}
-                    <div className="flex-1">
-                      <p className={`text-sm font-semibold ${!n.read ? 'text-surface-900 dark:text-white' : 'text-surface-700 dark:text-surface-300'}`}>
-                        {n.title}
-                      </p>
-                      <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">
-                        {n.message}
-                      </p>
-                      <p className="mt-2 text-xs text-surface-400 dark:text-surface-500">
-                        {new Date(n.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <p className="text-sm text-surface-500 dark:text-surface-400 mb-1">Correo registrado:</p>
+            <p className="text-sm font-semibold text-surface-800 dark:text-surface-100">{user.email}</p>
+            <p className="text-xs text-surface-400 mt-3 italic">
+              Autenticado con Firebase Authentication
+            </p>
           </motion.div>
+        </div>
 
-          {/* Itinerarios */}
+        {/* Columna Derecha: Itinerarios */}
+        <div className="col-span-1 space-y-8 md:col-span-2">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -173,30 +141,20 @@ export default function PerfilPage() {
           >
             <div className="mb-6 flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
               <Compass className="h-5 w-5" />
-              <h2 className="font-semibold text-surface-900 dark:text-surface-50">Mis Itinerarios</h2>
+              <h2 className="font-semibold text-surface-900 dark:text-surface-50">Mis Tours Agendados</h2>
             </div>
-            
-            {user.toursReservados.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-surface-300 p-8 text-center dark:border-surface-600">
-                <p className="mb-4 text-surface-600 dark:text-surface-400">
-                  Aún no has agendado ningún itinerario.
-                </p>
-                <Link
-                  href="/itinerarios"
-                  className="inline-flex items-center justify-center rounded-xl bg-surface-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-surface-800 dark:bg-white dark:text-surface-900 dark:hover:bg-surface-100"
-                >
-                  Explorar Itinerarios
-                </Link>
-              </div>
-            ) : (
-              <ul className="space-y-3">
-                {user.toursReservados.map((tour, idx) => (
-                  <li key={idx} className="rounded-lg bg-surface-50 p-4 dark:bg-surface-900/50">
-                    <p className="font-medium text-surface-900 dark:text-surface-50">{tour}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
+
+            <div className="rounded-xl border border-dashed border-surface-300 p-8 text-center dark:border-surface-600">
+              <p className="mb-4 text-surface-600 dark:text-surface-400">
+                Consulta y gestiona todos tus tours reservados en la sección de Agenda.
+              </p>
+              <Link
+                href="/agenda"
+                className="inline-flex items-center justify-center rounded-xl bg-surface-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-surface-800 dark:bg-white dark:text-surface-900 dark:hover:bg-surface-100"
+              >
+                Ver Mi Agenda
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>

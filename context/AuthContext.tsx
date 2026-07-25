@@ -1,163 +1,135 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { eventosData } from "../lib/eventos";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import {
+  getUserProfile,
+  updateUserProfile,
+  type UserProfile,
+} from '@/lib/firebaseFirestore';
+import {
+  loginWithEmail,
+  signupWithEmail,
+  logoutUser,
+  loginWithGoogle,
+} from '@/lib/firebaseAuth';
 
-export type Region = "Huasteca" | "Altiplano" | "Centro" | "Media" | "";
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  read: boolean;
-  date: string;
-}
+export type Region = 'Huasteca' | 'Altiplano' | 'Centro' | 'Media' | '';
 
 export interface User {
-  id: string;
+  uid: string;
   nombre: string;
   email: string;
   regionFavorita: Region;
-  notificaciones: Notification[];
-  toursReservados: string[];
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password?: string) => void;
-  signup: (nombre: string, email: string, password?: string) => void;
-  logout: () => void;
-  updatePreferences: (regionFavorita: Region) => void;
-  markNotificationsAsRead: () => void;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (nombre: string, email: string, password: string) => Promise<void>;
+  loginGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+  updatePreferences: (regionFavorita: Region) => Promise<void>;
+  error: string | null;
+  clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const defaultSession: User = {
-  id: "1",
-  nombre: "Usuario Demo",
-  email: "demo@sanluis.mx",
-  regionFavorita: "Huasteca",
-  notificaciones: [],
-  toursReservados: [],
-};
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Escucha cambios en la sesión de Firebase en tiempo real
   useEffect(() => {
-    // Cargar sesión
-    const storedUser = localStorage.getItem("slp_user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        // Generar notificaciones dinámicas según región
-        setUser(generateNotifications(parsedUser));
-      } catch (e) {
-        setUser(generateNotifications(defaultSession));
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        const profile = await getUserProfile(firebaseUser.uid);
+        setUser({
+          uid: firebaseUser.uid,
+          nombre: profile?.nombre || firebaseUser.displayName || 'Usuario',
+          email: firebaseUser.email || '',
+          regionFavorita: (profile?.regionFavorita as Region) || '',
+        });
+      } else {
+        setUser(null);
       }
-    } else {
-      setUser(generateNotifications(defaultSession));
-    }
-    setIsLoaded(true);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const generateNotifications = (currentUser: User): User => {
-    if (!currentUser.regionFavorita) return currentUser;
-
-    const unreadExisting = currentUser.notificaciones.filter(n => !n.read);
-    
-    // Filtrar eventos de lib/eventos.ts según región
-    let regionEventos = eventosData.filter(e => {
-      if (currentUser.regionFavorita === "Huasteca" && e.municipio.includes("Huasteca")) return true;
-      if (currentUser.regionFavorita === "Centro" && (e.municipio.includes("San Luis") || e.municipio.includes("Santa María"))) return true;
-      if (currentUser.regionFavorita === "Altiplano" && e.municipio.includes("Catorce")) return true;
-      return false;
-    });
-
-    const newNotifications: Notification[] = regionEventos.map((e, idx) => ({
-      id: `notif-${e.id}-${idx}`,
-      title: `Próximo evento: ${e.nombre}`,
-      message: `No te pierdas ${e.nombre} en ${e.mes} en ${e.municipio}.`,
-      read: false,
-      date: new Date().toISOString(),
-    }));
-
-    // Mantener sólo algunas notificaciones no leídas y mezclarlas (simulación simple)
-    const combined = [...unreadExisting];
-    newNotifications.forEach(nn => {
-      if (!combined.find(c => c.title === nn.title)) {
-        combined.push(nn);
-      }
-    });
-
-    return { ...currentUser, notificaciones: combined };
+  const handleError = (err: unknown): string => {
+    if (err instanceof Error) {
+      const msg = err.message;
+      if (msg.includes('email-already-in-use')) return 'Este correo ya está registrado.';
+      if (msg.includes('wrong-password') || msg.includes('invalid-credential')) return 'Correo o contraseña incorrectos.';
+      if (msg.includes('user-not-found')) return 'No existe una cuenta con ese correo.';
+      if (msg.includes('weak-password')) return 'La contraseña debe tener al menos 6 caracteres.';
+      if (msg.includes('invalid-email')) return 'El correo no tiene un formato válido.';
+      if (msg.includes('popup-closed-by-user')) return 'Inicio con Google cancelado.';
+    }
+    return 'Ocurrió un error. Intenta de nuevo.';
   };
 
-  const saveUser = (newUser: User | null) => {
-    setUser(newUser);
-    if (newUser) {
-      localStorage.setItem("slp_user", JSON.stringify(newUser));
-    } else {
-      localStorage.removeItem("slp_user");
+  const login = async (email: string, password: string) => {
+    setError(null);
+    try {
+      await loginWithEmail(email, password);
+    } catch (err) {
+      setError(handleError(err));
+      throw err;
     }
   };
 
-  const login = (email: string, password?: string) => {
-    // Simulación
-    const u: User = {
-      id: "2",
-      nombre: email.split("@")[0],
-      email: email,
-      regionFavorita: "Huasteca",
-      notificaciones: [],
-      toursReservados: [],
-    };
-    saveUser(generateNotifications(u));
-  };
-
-  const signup = (nombre: string, email: string, password?: string) => {
-    const u: User = {
-      id: String(Date.now()),
-      nombre,
-      email,
-      regionFavorita: "",
-      notificaciones: [],
-      toursReservados: [],
-    };
-    saveUser(u);
-  };
-
-  const logout = () => {
-    saveUser(null);
-  };
-
-  const updatePreferences = (regionFavorita: Region) => {
-    if (user) {
-      const updatedUser = { ...user, regionFavorita };
-      saveUser(generateNotifications(updatedUser));
+  const signup = async (nombre: string, email: string, password: string) => {
+    setError(null);
+    try {
+      await signupWithEmail(nombre, email, password);
+    } catch (err) {
+      setError(handleError(err));
+      throw err;
     }
   };
 
-  const markNotificationsAsRead = () => {
-    if (user) {
-      const updatedNotifs = user.notificaciones.map(n => ({ ...n, read: true }));
-      saveUser({ ...user, notificaciones: updatedNotifs });
+  const loginGoogle = async () => {
+    setError(null);
+    try {
+      await loginWithGoogle();
+    } catch (err) {
+      setError(handleError(err));
+      throw err;
     }
   };
+
+  const logout = async () => {
+    await logoutUser();
+    setUser(null);
+  };
+
+  const updatePreferences = async (regionFavorita: Region) => {
+    if (!user) return;
+    await updateUserProfile(user.uid, { regionFavorita });
+    setUser((prev) => prev ? { ...prev, regionFavorita } : prev);
+  };
+
+  const clearError = () => setError(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, updatePreferences, markNotificationsAsRead }}>
-      {isLoaded ? children : null}
+    <AuthContext.Provider
+      value={{ user, loading, login, signup, loginGoogle, logout, updatePreferences, error, clearError }}
+    >
+      {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider');
+  return ctx;
 };
