@@ -41,6 +41,10 @@ export default function Navbar() {
                 Inicio
               </Link>
               
+              <Link href="/noticias" className="text-sm font-medium text-surface-900/70 dark:text-surface-50/70 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                Noticias
+              </Link>
+              
               {/* Dropdown Explorar */}
               <div className="relative group">
                 <button className="flex items-center gap-1.5 text-sm font-medium text-surface-900/70 dark:text-surface-50/70 hover:text-amber-700 dark:hover:text-amber-400 transition-colors py-2">
@@ -147,6 +151,9 @@ export default function Navbar() {
               <SearchBar />
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-3 rounded-xl text-base font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 Inicio
+              </Link>
+              <Link href="/noticias" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-3 rounded-xl text-base font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
+                Noticias
               </Link>
               <Link href="/descubre" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-3 bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 rounded-xl text-base font-medium">
                 Test: Descubre tu destino
