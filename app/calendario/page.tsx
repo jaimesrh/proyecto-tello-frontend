@@ -7,7 +7,7 @@ import CalendarView from '@/components/CalendarView';
 export default function CalendarioPage() {
   return (
     <div className="pt-24 pb-20 px-4 min-h-screen">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center p-3 bg-amber-100 dark:bg-amber-900/30 rounded-2xl mb-6 shadow-sm">
             <CalendarDays className="w-8 h-8 text-amber-700 dark:text-amber-400" />

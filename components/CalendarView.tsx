@@ -89,9 +89,9 @@ export default function CalendarView({ eventos }: CalendarViewProps) {
   const displayEvents = selectedDate ? selectedEvents : monthEvents;
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* Contenedor del Calendario */}
-      <div className="glass-panel p-6 rounded-3xl border border-surface-200 dark:border-surface-700 shadow-sm max-w-2xl mx-auto w-full">
+    <div className="flex flex-col lg:flex-row gap-8 items-start">
+      {/* Contenedor del Calendario (Lado Izquierdo en Desktop) */}
+      <div className="glass-panel p-6 rounded-3xl border border-surface-200 dark:border-surface-700 shadow-sm w-full lg:w-3/5">
         
         {/* Cabecera del Calendario */}
         <div className="flex items-center justify-between mb-6">
@@ -153,14 +153,14 @@ export default function CalendarView({ eventos }: CalendarViewProps) {
         </div>
       </div>
 
-      {/* Tarjetas de Eventos */}
-      <div className="max-w-2xl mx-auto w-full">
+      {/* Tarjetas de Eventos (Lado Derecho en Desktop) */}
+      <div className="w-full lg:w-2/5 lg:sticky lg:top-28">
         <div className="flex items-center justify-between mb-4 px-2">
           <h3 className="text-lg font-semibold text-surface-800 dark:text-surface-200 flex items-center gap-2">
             <CalendarIcon className="w-5 h-5 text-amber-600" />
             {selectedDate 
               ? `Eventos del ${selectedDate.getDate()} de ${MONTHS[selectedDate.getMonth()]}`
-              : `Eventos destacados en ${MONTHS[currentMonth]}`
+              : `Eventos en ${MONTHS[currentMonth]}`
             }
           </h3>
           {selectedDate && (
@@ -173,41 +173,43 @@ export default function CalendarView({ eventos }: CalendarViewProps) {
           )}
         </div>
 
-        <AnimatePresence mode="popLayout">
-          {displayEvents.length > 0 ? (
-            displayEvents.map((evento) => (
+        <div className="max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-surface-300 dark:scrollbar-thumb-surface-600">
+          <AnimatePresence mode="popLayout">
+            {displayEvents.length > 0 ? (
+              displayEvents.map((evento) => (
+                <motion.div
+                  key={evento.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 p-6 rounded-2xl shadow-sm mb-4"
+                >
+                  <h4 className="text-xl font-bold text-surface-900 dark:text-white mb-2">{evento.nombre}</h4>
+                  <div className="flex items-center gap-2 text-surface-500 dark:text-surface-400 text-sm font-medium mb-3">
+                    <MapPin className="w-4 h-4" />
+                    {evento.municipio}
+                  </div>
+                  <p className="text-surface-600 dark:text-surface-300 text-sm leading-relaxed">
+                    {evento.descripcion}
+                  </p>
+                </motion.div>
+              ))
+            ) : (
               <motion.div
-                key={evento.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 p-6 rounded-2xl shadow-sm mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center p-8 border border-dashed border-surface-300 dark:border-surface-700 rounded-2xl"
               >
-                <h4 className="text-xl font-bold text-surface-900 dark:text-white mb-2">{evento.nombre}</h4>
-                <div className="flex items-center gap-2 text-surface-500 dark:text-surface-400 text-sm font-medium mb-3">
-                  <MapPin className="w-4 h-4" />
-                  {evento.municipio}
-                </div>
-                <p className="text-surface-600 dark:text-surface-300 text-sm leading-relaxed">
-                  {evento.descripcion}
+                <p className="text-surface-500 dark:text-surface-400">
+                  {selectedDate 
+                    ? "No hay eventos programados para este día."
+                    : "No hay eventos destacados para este mes."}
                 </p>
               </motion.div>
-            ))
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center p-8 border border-dashed border-surface-300 dark:border-surface-700 rounded-2xl"
-            >
-              <p className="text-surface-500 dark:text-surface-400">
-                {selectedDate 
-                  ? "No hay eventos programados para este día."
-                  : "No hay eventos destacados para este mes."}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
