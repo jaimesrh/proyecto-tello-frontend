@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import TabSystem from '@/components/TabSystem';
+import ReviewSection from '@/components/ReviewSection';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -84,6 +85,9 @@ export default async function PuebloPage({ params }: Props) {
       {/* Contenido Principal */}
       <div className="max-w-7xl mx-auto px-4 pt-12">
         <TabSystem pueblo={pueblo} />
+        
+        {/* Sección de Reseñas */}
+        <ReviewSection targetId={String(pueblo.id)} />
       </div>
     </div>
   );

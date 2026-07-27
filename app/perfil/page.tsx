@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { LogOut, MapPin, Bell, Compass } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import PassportGrid from '@/components/PassportGrid';
 
 export default function PerfilPage() {
   const { user, logout, updatePreferences } = useAuth();
@@ -157,6 +158,11 @@ export default function PerfilPage() {
             </div>
           </motion.div>
         </div>
+      </div>
+
+      {/* Gamification Passport Section */}
+      <div className="mt-12">
+        <PassportGrid userId={user.uid} />
       </div>
     </div>
   );

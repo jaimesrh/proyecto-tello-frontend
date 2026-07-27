@@ -66,6 +66,9 @@ export default function Navbar() {
                     <Link href="/galeria" className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
                       <Camera className="w-4 h-4 text-blue-500" /> Spots Fotográficos
                     </Link>
+                    <Link href="/artesanias" className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+                      <Utensils className="w-4 h-4 text-orange-500" /> Mercado Potosino
+                    </Link>
                     <Link href="/calendario" className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
                       <CalendarDays className="w-4 h-4 text-purple-500" /> Calendario
                     </Link>
@@ -174,6 +177,9 @@ export default function Navbar() {
               </Link>
               <Link href="/galeria" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <Camera className="w-5 h-5 text-blue-500" /> Spots Fotográficos
+              </Link>
+              <Link href="/artesanias" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
+                <Utensils className="w-5 h-5 text-orange-500" /> Mercado Potosino
               </Link>
               <Link href="/calendario" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <CalendarDays className="w-5 h-5 text-purple-500" /> Calendario de Eventos
