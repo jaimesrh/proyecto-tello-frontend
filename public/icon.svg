@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1917" />
+      <stop offset="50%" stop-color="#292524" />
+      <stop offset="100%" stop-color="#0f0e0d" />
+    </linearGradient>
+
+    <!-- Map Gradient (Amber Gold to Warm Terracotta) -->
+    <linearGradient id="slpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="40%" stop-color="#f59e0b" />
+      <stop offset="80%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+
+    <!-- Soft Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#f59e0b" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Badge -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  <circle cx="256" cy="256" r="236" fill="none" stroke="#f59e0b" stroke-width="4" stroke-opacity="0.25" />
+
+  <!-- San Luis Potosí State Silhouette (The Iconic Terrier Map Shape of SLP) -->
+  <g filter="url(#glow)">
+    <path fill="url(#slpGrad)" d="
+      M 265,75 
+      C 275,70 295,68 305,78 
+      C 312,85 315,100 310,115 
+      C 305,128 298,140 295,152 
+      C 292,165 296,175 308,182 
+      C 320,188 340,190 355,195 
+      C 370,200 390,210 405,222 
+      C 418,232 428,245 432,260 
+      C 435,275 425,290 410,298 
+      C 395,305 375,302 360,305 
+      C 348,308 335,315 328,325 
+      C 320,335 318,348 312,360 
+      C 305,372 292,385 280,392 
+      C 268,400 252,408 238,415 
+      C 225,420 210,425 198,420 
+      C 188,415 182,402 185,390 
+      C 188,378 198,368 202,355 
+      C 205,342 198,332 190,325 
+      C 182,318 170,312 162,302 
+      C 152,290 148,275 145,260 
+      C 142,242 145,225 152,210 
+      C 160,195 172,185 185,178 
+      C 198,170 210,165 220,152 
+      C 228,140 232,125 240,110 
+      C 248,95 255,82 265,75 Z
+    " />
+    
+    <!-- Accent Star / Compass Pin on SLP Capital -->
+    <circle cx="230" cy="300" r="14" fill="#ffffff" />
+    <circle cx="230" cy="300" r="8" fill="#b45309" />
+  </g>
+</svg>

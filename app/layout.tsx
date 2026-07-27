@@ -9,8 +9,13 @@ const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', axe
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Conoce San Luis Potosi',
-  description: 'Conoce San Luis Potosi. Explora su cultura, atractivos naturales, gastronomia y desarrollo sostenible.',
+  title: 'Conoce San Luis Potosí',
+  description: 'Conoce San Luis Potosí. Explora su cultura, atractivos naturales, gastronomía y desarrollo sostenible.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
