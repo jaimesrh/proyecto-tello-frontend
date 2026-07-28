@@ -6,6 +6,8 @@ import { getReviews, addReview, Review } from '@/lib/reviewsFirebase';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 
+import AuthModal from './AuthModal';
+
 interface Props {
   targetId: string;
 }
@@ -18,6 +20,7 @@ export default function ReviewSection({ targetId }: Props) {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   useEffect(() => {
     fetchReviews();
@@ -111,14 +114,19 @@ export default function ReviewSection({ targetId }: Props) {
           <p className="text-stone-600 dark:text-stone-400">
             Inicia sesión para compartir tu experiencia.
           </p>
-          <Link
-            href="/login"
+          <button
+            onClick={() => setAuthModalOpen(true)}
             className="text-amber-600 dark:text-amber-500 font-medium hover:underline"
           >
             Iniciar sesión
-          </Link>
+          </button>
         </div>
       )}
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
 
       {/* Lista de Reseñas */}
       <div className="space-y-6">
