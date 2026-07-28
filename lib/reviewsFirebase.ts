@@ -15,12 +15,11 @@ export const getReviews = async (targetId: string): Promise<Review[]> => {
   const reviewsRef = collection(db, 'reviews');
   const q = query(
     reviewsRef,
-    where('targetId', '==', targetId),
-    orderBy('date', 'desc')
+    where('targetId', '==', targetId)
   );
 
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => {
+  const reviews = snapshot.docs.map(doc => {
     const data = doc.data();
     let dateStr = '';
     if (data.date instanceof Timestamp) {
@@ -45,6 +44,8 @@ export const getReviews = async (targetId: string): Promise<Review[]> => {
       date: dateStr,
     } as Review;
   });
+
+  return reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 export const addReview = async (review: Omit<Review, 'id' | 'date'>): Promise<string> => {
