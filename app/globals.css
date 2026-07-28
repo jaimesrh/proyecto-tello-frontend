@@ -8,7 +8,14 @@
   }
 
   body {
-    @apply bg-surface-50 text-surface-900 dark:bg-surface-900 dark:text-surface-50 font-sans antialiased;
+    @apply bg-surface-50 text-surface-900 dark:bg-surface-900 dark:text-surface-50 font-sans antialiased relative min-h-screen;
+    background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.08) 1px, transparent 0);
+    background-size: 24px 24px;
+    background-attachment: fixed;
+  }
+
+  .dark body, body.dark, html.dark body {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, transparent 0);
   }
 
   ::selection {
