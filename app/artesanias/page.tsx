@@ -6,7 +6,7 @@ import { ShoppingBag, Star, Filter, Search, ChevronRight } from 'lucide-react';
 import { productos, Producto } from '@/lib/productos';
 import Image from 'next/image';
 
-const CATEGORIES = ["Todos", "Alimentos", "Bebidas", "Textiles", "Artesanías"];
+const CATEGORIES = ["Todos", "Textiles", "Artesanías", "Talla en Madera"];
 
 export default function ArtesaniasPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
@@ -22,21 +22,19 @@ export default function ArtesaniasPage() {
   }, [selectedCategory, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Hero Section */}
       <section className="relative w-full h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image
+          <img
             src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&q=80&w=2000"
             alt="Artesanías de México"
-            fill
-            className="object-cover opacity-90 dark:opacity-40"
-            priority
+            className="w-full h-full object-cover opacity-90 dark:opacity-40"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/60 to-transparent dark:from-slate-950 dark:via-slate-950/80" />
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-20">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -51,7 +49,7 @@ export default function ArtesaniasPage() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto"
           >
-            Descubre y apoya el talento local. Lleva a casa la auténtica esencia de San Luis Potosí a través de sus sabores, textiles y creaciones.
+            Descubre y apoya el talento local. Lleva a casa la auténtica esencia de San Luis Potosí a través de sus texturas y creaciones.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -139,11 +137,10 @@ function ProductCard({ producto }: { producto: Producto }) {
       className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
     >
       <div className="relative h-64 overflow-hidden w-full">
-        <Image
+        <img
           src={producto.imagenUrl}
           alt={producto.nombre}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
         />
         <div className="absolute top-4 left-4">
           <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-xs font-semibold text-amber-700 dark:text-amber-500 rounded-full shadow-sm uppercase tracking-wider">
