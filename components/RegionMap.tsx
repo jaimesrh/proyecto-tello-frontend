@@ -406,6 +406,121 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                       </motion.div>
                     ))}
                   </div>
+
+                  {/* Nueva sección: Datos Rápidos de la Región y Enlace a Parajes */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: activeRegionData.pueblos.length * 0.1 + 0.2, duration: 0.4 }}
+                    className="mt-8 pt-8 border-t border-surface-200 dark:border-surface-800"
+                  >
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-surface-500 mb-4">
+                      Perfil Geográfico
+                    </h4>
+                    
+                    {/* Grid de 3 columnas para Clima, Altitud, Ecosistema */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                      {activeRegion === 'Altiplano' && (
+                        <>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.ThermometerSun className="w-5 h-5 text-amber-500 mb-1" />
+                            <p className="text-xs text-surface-500">Clima</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Seco desértico</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Mountain className="w-5 h-5 text-amber-600 mb-1" />
+                            <p className="text-xs text-surface-500">Altitud Promedio</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">2,000 msnm</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Sun className="w-5 h-5 text-green-600 mb-1" />
+                            <p className="text-xs text-surface-500">Ecosistema</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Matorral y cactáceas</p>
+                          </div>
+                        </>
+                      )}
+                      {activeRegion === 'Centro' && (
+                        <>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <CloudSun className="w-5 h-5 text-blue-500 mb-1" />
+                            <p className="text-xs text-surface-500">Clima</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Templado subhúmedo</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Mountain className="w-5 h-5 text-amber-600 mb-1" />
+                            <p className="text-xs text-surface-500">Altitud Promedio</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">1,860 msnm</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <TreePine className="w-5 h-5 text-green-600 mb-1" />
+                            <p className="text-xs text-surface-500">Ecosistema</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Bosque pino-encino</p>
+                          </div>
+                        </>
+                      )}
+                      {activeRegion === 'Media' && (
+                        <>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Sun className="w-5 h-5 text-orange-500 mb-1" />
+                            <p className="text-xs text-surface-500">Clima</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Semicálido húmedo</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Mountain className="w-5 h-5 text-amber-600 mb-1" />
+                            <p className="text-xs text-surface-500">Altitud Promedio</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">1,000 msnm</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Leaf className="w-5 h-5 text-green-500 mb-1" />
+                            <p className="text-xs text-surface-500">Ecosistema</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Selva baja caducifolia</p>
+                          </div>
+                        </>
+                      )}
+                      {activeRegion === 'Huasteca' && (
+                        <>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.CloudRain className="w-5 h-5 text-blue-400 mb-1" />
+                            <p className="text-xs text-surface-500">Clima</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Cálido tropical</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Mountain className="w-5 h-5 text-amber-600 mb-1" />
+                            <p className="text-xs text-surface-500">Altitud Promedio</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">100 - 500 msnm</p>
+                          </div>
+                          <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-xl">
+                            <LucideIcons.Palmtree className="w-5 h-5 text-green-500 mb-1" />
+                            <p className="text-xs text-surface-500">Ecosistema</p>
+                            <p className="text-sm font-medium text-surface-900 dark:text-surface-50">Selva alta y ríos</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Banner de Parajes (Cross-sell a la otra capa) */}
+                    {activeRegionData.parajes && activeRegionData.parajes.length > 0 && (
+                      <div 
+                        onClick={() => setActiveLayer('PARAJES_HIDROLOGICOS')}
+                        className="glass-panel p-4 rounded-2xl flex items-center justify-between cursor-pointer group hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                            <LucideIcons.Waves className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h5 className="font-semibold text-surface-900 dark:text-surface-50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              Descubre {activeRegionData.parajes.length} parajes naturales
+                            </h5>
+                            <p className="text-xs text-surface-500 dark:text-surface-400">
+                              Cascadas, ríos y maravillas en {activeRegionData.nombre}
+                            </p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-surface-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                      </div>
+                    )}
+                  </motion.div>
                 </motion.div>
               ) : (
                 /* VISTA VACÍA INICIAL */
