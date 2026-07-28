@@ -15,7 +15,7 @@ export const productos: Producto[] = [
     descripcion: "Elegante rebozo tejido a mano en telar de cintura con hilos de seda, utilizando la técnica tradicional del ikat.",
     categoria: "Textiles",
     precio: 2500.00,
-    imagenUrl: "https://images.unsplash.com/photo-1605389659089-6019343ee0cc?auto=format&fit=crop&q=80&w=800",
+    imagenUrl: "/artesanias/rebozo.jpg",
     artesano: "Taller Hermanas García"
   },
   {
@@ -24,7 +24,7 @@ export const productos: Producto[] = [
     descripcion: "Colorido cesto tejido a mano con fibras de palma natural, teñidas con pigmentos de la región.",
     categoria: "Artesanías",
     precio: 320.00,
-    imagenUrl: "https://images.unsplash.com/photo-1590725140246-20acdb6135dd?auto=format&fit=crop&q=80&w=800",
+    imagenUrl: "/artesanias/cesto.jpg",
     artesano: "Familia Hernández"
   },
   {
@@ -33,7 +33,7 @@ export const productos: Producto[] = [
     descripcion: "Auténtica máscara de madera tallada a mano utilizada en las danzas tradicionales de Xantolo.",
     categoria: "Talla en Madera",
     precio: 1200.00,
-    imagenUrl: "https://images.unsplash.com/photo-1588667551065-9856fdb47e7d?auto=format&fit=crop&q=80&w=800",
+    imagenUrl: "/artesanias/mascara.jpg",
     artesano: "Maestro Talla Francisco"
   },
   {
@@ -42,7 +42,7 @@ export const productos: Producto[] = [
     descripcion: "Hermoso morral con bordados tradicionales Tenek de hilos de colores sobre tela de algodón, simbolizando la cosmogonía huasteca.",
     categoria: "Textiles",
     precio: 450.00,
-    imagenUrl: "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&q=80&w=800",
+    imagenUrl: "/artesanias/morral.jpg",
     artesano: "Cooperativa de Mujeres Artesanas"
   }
 ];
