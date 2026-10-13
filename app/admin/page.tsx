@@ -65,6 +65,59 @@ type AdminTab =
   | 'tours'
   | 'moderacion';
 
+const COMUNIDADES_POR_REGION: Record<string, string[]> = {
+  Huasteca: [
+    'Aquismón',
+    'Xilitla',
+    'Tanchachín (Aquismón)',
+    'La Morena (Aquismón)',
+    'Tamapatz (Aquismón)',
+    'Mantetzulel (Aquismón)',
+    'Tampaxal (Aquismón)',
+    'Las Pozas (Xilitla)',
+    'Axtla de Terrazas',
+    'El Naranjo',
+    'Ciudad Valles',
+    'Tamasopo',
+    'Huehuetlán',
+    'Tancanhuitz',
+    'Huasteca Potosina',
+  ],
+  Altiplano: [
+    'Real de Catorce',
+    'Estación Catorce',
+    'Wirikuta / Cerro del Quemado',
+    'Ex Hacienda Laguna Seca',
+    'Los Catorce',
+    'Matehuala',
+    'Charcas',
+    'Venado',
+    'Salinas de Hidalgo',
+  ],
+  Centro: [
+    'Santa María del Río',
+    'Tierra Nueva',
+    'San Luis Potosí (Capital)',
+    'Hacienda de Lourdes (Santa María del Río)',
+    'Ojo Caliente (Santa María del Río)',
+    'Vigas / Presa La Muñeca (Tierra Nueva)',
+    'Cerro de San Pedro',
+    'Armadillo de los Infante',
+    'Soledad de Graciano Sánchez',
+  ],
+  Media: [
+    'Ciudad del Maíz',
+    'Rioverde',
+    'Media Luna (Rioverde)',
+    'Los Peroles (Ciudad del Maíz)',
+    'El Tepeyac (Ciudad del Maíz)',
+    'San Bartolo (Ciudad del Maíz)',
+    'Estación Tablas (Ciudad del Maíz)',
+    'San Ciro de Acosta',
+    'Cárdenas',
+  ],
+};
+
 export default function AdminDashboardPage() {
   const { user, logout, loading: authLoading } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -1134,17 +1187,26 @@ export default function AdminDashboardPage() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase mb-1">
-                    Municipio / Región *
+                    Pueblo Mágico / Comunidad / Municipio *
                   </label>
-                  <input
-                    type="text"
+                  <select
                     required
                     value={editingEvento.municipio}
                     onChange={(e) =>
                       setEditingEvento({ ...editingEvento, municipio: e.target.value })
                     }
                     className="w-full px-3.5 py-2 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-sm"
-                  />
+                  >
+                    {Object.entries(COMUNIDADES_POR_REGION).map(([reg, comunidades]) => (
+                      <optgroup key={reg} label={`Región ${reg}`}>
+                        {comunidades.map((com) => (
+                          <option key={com} value={com}>
+                            {com}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase mb-1">Descripción *</label>
@@ -1220,9 +1282,16 @@ export default function AdminDashboardPage() {
                     <label className="block text-xs font-bold uppercase mb-1">Región</label>
                     <select
                       value={editingPlatillo.region}
-                      onChange={(e) =>
-                        setEditingPlatillo({ ...editingPlatillo, region: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const nuevaRegion = e.target.value;
+                        const primeraComunidad =
+                          COMUNIDADES_POR_REGION[nuevaRegion]?.[0] || '';
+                        setEditingPlatillo({
+                          ...editingPlatillo,
+                          region: nuevaRegion,
+                          pueblo: primeraComunidad,
+                        });
+                      }}
                       className="w-full px-3.5 py-2 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-sm"
                     >
                       <option value="Huasteca">Huasteca</option>
@@ -1233,16 +1302,29 @@ export default function AdminDashboardPage() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold uppercase mb-1">
-                      Pueblo Mágico / Municipio
+                      Pueblo Mágico / Comunidad
                     </label>
-                    <input
-                      type="text"
+                    <select
                       value={editingPlatillo.pueblo || ''}
                       onChange={(e) =>
                         setEditingPlatillo({ ...editingPlatillo, pueblo: e.target.value })
                       }
                       className="w-full px-3.5 py-2 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-sm"
-                    />
+                    >
+                      {(COMUNIDADES_POR_REGION[editingPlatillo.region] || []).map((com) => (
+                        <option key={com} value={com}>
+                          {com}
+                        </option>
+                      ))}
+                      {editingPlatillo.pueblo &&
+                        !(COMUNIDADES_POR_REGION[editingPlatillo.region] || []).includes(
+                          editingPlatillo.pueblo
+                        ) && (
+                          <option value={editingPlatillo.pueblo}>
+                            {editingPlatillo.pueblo}
+                          </option>
+                        )}
+                    </select>
                   </div>
                 </div>
                 <div>
@@ -1498,9 +1580,16 @@ export default function AdminDashboardPage() {
                     <label className="block text-xs font-bold uppercase mb-1">Región</label>
                     <select
                       value={editingTour.region}
-                      onChange={(e) =>
-                        setEditingTour({ ...editingTour, region: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const nuevaRegion = e.target.value;
+                        const primeraComunidad =
+                          COMUNIDADES_POR_REGION[nuevaRegion]?.[0] || '';
+                        setEditingTour({
+                          ...editingTour,
+                          region: nuevaRegion,
+                          pueblo: primeraComunidad,
+                        });
+                      }}
                       className="w-full px-3.5 py-2 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-sm"
                     >
                       <option value="Huasteca">Huasteca</option>
@@ -1510,16 +1599,29 @@ export default function AdminDashboardPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase mb-1">Pueblo Mágico *</label>
-                    <input
-                      type="text"
+                    <label className="block text-xs font-bold uppercase mb-1">
+                      Pueblo Mágico / Comunidad *
+                    </label>
+                    <select
                       required
                       value={editingTour.pueblo}
                       onChange={(e) =>
                         setEditingTour({ ...editingTour, pueblo: e.target.value })
                       }
                       className="w-full px-3.5 py-2 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-sm"
-                    />
+                    >
+                      {(COMUNIDADES_POR_REGION[editingTour.region] || []).map((com) => (
+                        <option key={com} value={com}>
+                          {com}
+                        </option>
+                      ))}
+                      {editingTour.pueblo &&
+                        !(COMUNIDADES_POR_REGION[editingTour.region] || []).includes(
+                          editingTour.pueblo
+                        ) && (
+                          <option value={editingTour.pueblo}>{editingTour.pueblo}</option>
+                        )}
+                    </select>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
