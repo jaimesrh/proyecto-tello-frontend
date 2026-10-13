@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, MapPin, Clock, DollarSign, Filter, CheckCircle2 } from "lucide-react";
-import { tours, Tour } from "@/lib/tours";
+import { tours as toursInitial, Tour } from "@/lib/tours";
+import { getManagedTours } from "@/lib/adminFirebase";
 import BookingModal from "@/components/BookingModal";
 
 export default function ToursPage() {
+  const [listaTours, setListaTours] = useState<Tour[]>(toursInitial);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("Todas");
   const [selectedType, setSelectedType] = useState("Todos");
@@ -14,10 +16,14 @@ export default function ToursPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
 
+  useEffect(() => {
+    getManagedTours().then(setListaTours);
+  }, []);
+
   const regiones = ["Todas", "Centro", "Altiplano", "Media", "Huasteca"];
   const tipos = ["Todos", "Aventura", "Cultural", "Gastronómico", "Relax"];
 
-  const filteredTours = tours.filter((tour) => {
+  const filteredTours = listaTours.filter((tour) => {
     const matchesSearch = tour.titulo.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           tour.pueblo.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRegion = selectedRegion === "Todas" || tour.region === selectedRegion;

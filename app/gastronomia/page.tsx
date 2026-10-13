@@ -1,10 +1,18 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Utensils, ChefHat } from 'lucide-react';
-import { gastronomiaData } from '@/lib/gastronomia';
+import { gastronomiaData, Platillo } from '@/lib/gastronomia';
+import { getManagedPlatillos } from '@/lib/adminFirebase';
 
 export default function GastronomiaPage() {
+  const [platillos, setPlatillos] = useState<Platillo[]>(gastronomiaData);
+
+  useEffect(() => {
+    getManagedPlatillos().then(setPlatillos);
+  }, []);
+
   return (
     <div className="pt-24 pb-20 px-4 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -22,7 +30,7 @@ export default function GastronomiaPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {gastronomiaData.map((platillo, idx) => (
+          {platillos.map((platillo, idx) => (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

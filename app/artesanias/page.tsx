@@ -1,25 +1,31 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Star, Filter, Search, ChevronRight } from 'lucide-react';
-import { productos, Producto } from '@/lib/productos';
+import { productos as productosInitial, Producto } from '@/lib/productos';
+import { getManagedProductos } from '@/lib/adminFirebase';
 import Image from 'next/image';
 
 const CATEGORIES = ["Todos", "Textiles", "Artesanías", "Talla en Madera"];
 
 export default function ArtesaniasPage() {
+  const [listaProductos, setListaProductos] = useState<Producto[]>(productosInitial);
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    getManagedProductos().then(setListaProductos);
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    return productos.filter((prod) => {
+    return listaProductos.filter((prod) => {
       const matchCategory = selectedCategory === "Todos" || prod.categoria === selectedCategory;
       const matchSearch = prod.nombre.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           prod.descripcion.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCategory && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [listaProductos, selectedCategory, searchQuery]);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">

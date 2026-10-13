@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, BarChart3, Sun, Moon, Menu, X, ChevronDown, Compass, Camera, CalendarDays, Utensils, Leaf, Library, ShoppingBag } from 'lucide-react';
+import { MapPin, BarChart3, Sun, Moon, Menu, X, ChevronDown, Compass, Camera, CalendarDays, Utensils, Leaf, Library, ShoppingBag, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import SearchBar from './SearchBar';
@@ -95,6 +95,13 @@ export default function Navbar() {
             {/* Auth y Notificaciones */}
             {mounted && (
               <div className="flex items-center gap-2">
+                <Link
+                  href="/admin"
+                  title="Panel de Administrador"
+                  className="p-2 rounded-2xl bg-surface-100 dark:bg-surface-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-surface-600 dark:text-surface-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                </Link>
                 <NotificationCenter />
                 {user ? (
                   <Link
@@ -195,6 +202,9 @@ export default function Navbar() {
               </Link>
               <Link href="/comparativo" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <BarChart3 className="w-5 h-5 text-stone-500" /> Análisis Comparativo
+              </Link>
+              <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20">
+                <ShieldCheck className="w-5 h-5 text-amber-600" /> Panel Administrador
               </Link>
             </div>
           </motion.div>

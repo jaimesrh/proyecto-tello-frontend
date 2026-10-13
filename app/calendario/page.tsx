@@ -1,10 +1,18 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { CalendarDays } from 'lucide-react';
-import { eventosData } from '@/lib/eventos';
+import { eventosData, Evento } from '@/lib/eventos';
+import { getManagedEventos } from '@/lib/adminFirebase';
 import CalendarView from '@/components/CalendarView';
 
 export default function CalendarioPage() {
+  const [eventos, setEventos] = useState<Evento[]>(eventosData);
+
+  useEffect(() => {
+    getManagedEventos().then(setEventos);
+  }, []);
+
   return (
     <div className="pt-24 pb-20 px-4 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -22,7 +30,7 @@ export default function CalendarioPage() {
         </div>
 
         {/* Vista Clásica del Calendario */}
-        <CalendarView eventos={eventosData} />
+        <CalendarView eventos={eventos} />
       </div>
     </div>
   );

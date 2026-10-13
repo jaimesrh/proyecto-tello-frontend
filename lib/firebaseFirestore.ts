@@ -135,42 +135,17 @@ const noticiasDemo: Omit<Noticia, 'id' | 'creadoEn'>[] = [
 ];
 
 export async function getNoticias(): Promise<Noticia[]> {
-  const colRef = collection(db, 'noticias');
-  try {
-    const q = query(colRef);
-    const snapshot = await getDocs(q);
-    
-    if (snapshot.empty) {
-      // Retornar datos demo si Firebase está vacío para que la UI no se vea rota
-      return noticiasDemo.map((n, i) => ({ id: `demo-${i}`, ...n }));
-    }
-    
-    const noticias = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Noticia));
-    return noticias.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-  } catch (error) {
-    // Si hay error de permisos, devolver fallback
-    return noticiasDemo.map((n, i) => ({ id: `demo-${i}`, ...n }));
-  }
+  const { getManagedNoticias } = await import('./adminFirebase');
+  return getManagedNoticias();
 }
 
 export async function getNoticiaBySlug(slug: string): Promise<Noticia | null> {
-  const colRef = collection(db, 'noticias');
-  try {
-    const q = query(colRef, where('slug', '==', slug));
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      // Buscar en demo
-      const demo = noticiasDemo.find(n => n.slug === slug);
-      return demo ? { id: 'demo-1', ...demo } : null;
-    }
-    return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() } as Noticia;
-  } catch (error) {
-    const demo = noticiasDemo.find(n => n.slug === slug);
-    return demo ? { id: 'demo-1', ...demo } : null;
-  }
+  const { getManagedNoticias } = await import('./adminFirebase');
+  const todas = await getManagedNoticias();
+  return todas.find((n) => n.slug === slug) || null;
 }
 
 export async function seedNoticias(): Promise<void> {
-  // Ya no es necesario usar el botón seed porque getNoticias tiene fallback
+  // Ya no es necesario usar el botón seed porque getNoticias tiene datos iniciales y gestión desde /admin
 }
 
