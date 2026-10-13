@@ -54,6 +54,9 @@ import {
   deleteReviewAsAdmin,
 } from '@/lib/adminFirebase';
 
+import { useAuth } from '@/context/AuthContext';
+import AuthModal from '@/components/AuthModal';
+
 type AdminTab =
   | 'noticias'
   | 'calendario'
@@ -62,13 +65,9 @@ type AdminTab =
   | 'tours'
   | 'moderacion';
 
-const ADMIN_PIN = 'admin123';
-const SESSION_KEY = 'slp_admin_unlocked';
-
 export default function AdminDashboardPage() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState(false);
+  const { user, logout, loading: authLoading } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>('noticias');
   const [toast, setToast] = useState<string | null>(null);
 
@@ -92,19 +91,10 @@ export default function AdminDashboardPage() {
   const [incluyeText, setIncluyeText] = useState('');
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved === 'true') {
-        setUnlocked(true);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (unlocked) {
+    if (user?.isAdmin) {
       loadAllData();
     }
-  }, [unlocked]);
+  }, [user]);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -135,21 +125,8 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleUnlock = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pinInput.trim() === ADMIN_PIN) {
-      setUnlocked(true);
-      setPinError(false);
-      sessionStorage.setItem(SESSION_KEY, 'true');
-    } else {
-      setPinError(true);
-    }
-  };
-
-  const handleLogoutAdmin = () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    setUnlocked(false);
-    setPinInput('');
+  const handleLogoutAdmin = async () => {
+    await logout();
   };
 
   // Subida y compresión de imagen para cualquier formulario
@@ -339,9 +316,17 @@ export default function AdminDashboardPage() {
   };
 
   // =========================================================
-  // VISTA DE ACCESO CON PIN DE ADMINISTRADOR
+  // VISTA SI EL USUARIO NO HA INICIADO SESIÓN COMO ADMIN
   // =========================================================
-  if (!unlocked) {
+  if (authLoading) {
+    return (
+      <div className="min-h-screen pt-28 pb-20 px-4 flex items-center justify-center text-surface-500">
+        Verificando sesión...
+      </div>
+    );
+  }
+
+  if (!user || !user.isAdmin) {
     return (
       <div className="min-h-screen pt-28 pb-20 px-4 flex items-center justify-center">
         <motion.div
@@ -353,37 +338,21 @@ export default function AdminDashboardPage() {
             <Lock className="w-8 h-8" />
           </div>
           <h1 className="text-2xl font-display font-bold text-surface-900 dark:text-white mb-2">
-            Panel de Administrador
+            Acceso Restringido a Administradores
           </h1>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-6">
-            Ingresa tu clave de administrador para gestionar noticias, calendario, gastronomía, artesanías, tours y moderación.
+            Inicia sesión desde el botón <strong>&quot;Ingresar&quot;</strong> con tu correo y contraseña de administrador para gestionar el sitio.
           </p>
 
-          <form onSubmit={handleUnlock} className="space-y-4">
-            <input
-              type="password"
-              value={pinInput}
-              onChange={(e) => setPinInput(e.target.value)}
-              placeholder="Clave de administrador (Ej. admin123)"
-              className="w-full px-4 py-3 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 text-center text-surface-900 dark:text-white focus:border-amber-500 focus:outline-none"
-            />
-            {pinError && (
-              <p className="text-xs text-red-500 font-medium">
-                Clave incorrecta. La clave predeterminada es: <strong>admin123</strong>
-              </p>
-            )}
-            <button
-              type="submit"
-              className="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm shadow-lg shadow-amber-600/20 transition-all"
-            >
-              Entrar al Panel de Control
-            </button>
-          </form>
-
-          <p className="text-xs text-surface-400 mt-6">
-            Clave actual configurada: <code className="text-amber-600 dark:text-amber-400 font-semibold">admin123</code>
-          </p>
+          <button
+            onClick={() => setAuthModalOpen(true)}
+            className="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm shadow-lg shadow-amber-600/20 transition-all"
+          >
+            Ingresar con Correo y Contraseña
+          </button>
         </motion.div>
+
+        <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
       </div>
     );
   }
@@ -430,7 +399,7 @@ export default function AdminDashboardPage() {
             className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-200/80 dark:bg-surface-800 hover:bg-red-100 dark:hover:bg-red-900/30 text-surface-700 dark:text-surface-300 hover:text-red-600 text-xs font-semibold transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            Bloquear Panel
+            Cerrar Sesión
           </button>
         </div>
 

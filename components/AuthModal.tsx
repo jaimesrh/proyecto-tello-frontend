@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useAuth, ADMIN_EMAILS } from '../context/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
 
 interface AuthModalProps {
@@ -12,7 +13,8 @@ interface AuthModalProps {
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [tab, setTab] = useState<'login' | 'signup'>('login');
-  const { login, signup, loginGoogle, error, clearError, loading } = useAuth();
+  const { login, signup, loginGoogle, error, clearError } = useAuth();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,12 +32,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setSubmitting(true);
     try {
+      const normalizedEmail = email.trim().toLowerCase();
       if (tab === 'login') {
         await login(email, password);
       } else {
         await signup(nombre, email, password);
       }
       onClose();
+      if (ADMIN_EMAILS.includes(normalizedEmail)) {
+        router.push('/admin');
+      }
     } catch {
       // error is handled in context
     } finally {

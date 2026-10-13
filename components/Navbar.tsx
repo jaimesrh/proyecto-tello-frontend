@@ -95,13 +95,16 @@ export default function Navbar() {
             {/* Auth y Notificaciones */}
             {mounted && (
               <div className="flex items-center gap-2">
-                <Link
-                  href="/admin"
-                  title="Panel de Administrador"
-                  className="p-2 rounded-2xl bg-surface-100 dark:bg-surface-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-surface-600 dark:text-surface-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                </Link>
+                {user?.isAdmin && (
+                  <Link
+                    href="/admin"
+                    title="Panel de Administrador"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-colors"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </Link>
+                )}
                 <NotificationCenter />
                 {user ? (
                   <Link
@@ -203,9 +206,11 @@ export default function Navbar() {
               <Link href="/comparativo" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-surface-100 dark:hover:bg-surface-800">
                 <BarChart3 className="w-5 h-5 text-stone-500" /> Análisis Comparativo
               </Link>
-              <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20">
-                <ShieldCheck className="w-5 h-5 text-amber-600" /> Panel Administrador
-              </Link>
+              {user?.isAdmin && (
+                <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20">
+                  <ShieldCheck className="w-5 h-5 text-amber-600" /> Panel Administrador
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

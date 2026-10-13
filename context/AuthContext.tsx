@@ -6,7 +6,6 @@ import { auth } from '@/lib/firebase';
 import {
   getUserProfile,
   updateUserProfile,
-  type UserProfile,
 } from '@/lib/firebaseFirestore';
 import {
   loginWithEmail,
@@ -22,7 +21,16 @@ export interface User {
   nombre: string;
   email: string;
   regionFavorita: Region;
+  isAdmin?: boolean;
 }
+
+export const ADMIN_EMAILS = [
+  'admin@sanluispotosi.gob.mx',
+  'admin@slp.com',
+  'admin@conocesanluis.com',
+];
+const ADMIN_DEFAULT_PASS = 'admin123';
+const LOCAL_ADMIN_STORAGE_KEY = 'slp_admin_session_user';
 
 interface AuthContextType {
   user: User | null;
@@ -43,18 +51,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Escucha cambios en la sesión de Firebase en tiempo real
+  // Escucha cambios en la sesión de Firebase en tiempo real o sesión de administrador
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         const profile = await getUserProfile(firebaseUser.uid);
+        const emailLower = (firebaseUser.email || '').toLowerCase();
+        const isUserAdmin = ADMIN_EMAILS.includes(emailLower);
+
         setUser({
           uid: firebaseUser.uid,
-          nombre: profile?.nombre || firebaseUser.displayName || 'Usuario',
+          nombre: profile?.nombre || firebaseUser.displayName || (isUserAdmin ? 'Administrador' : 'Usuario'),
           email: firebaseUser.email || '',
           regionFavorita: (profile?.regionFavorita as Region) || '',
+          isAdmin: isUserAdmin,
         });
       } else {
+        // Verificar si hay sesión activa de administrador local
+        if (typeof window !== 'undefined') {
+          const savedAdmin = localStorage.getItem(LOCAL_ADMIN_STORAGE_KEY);
+          if (savedAdmin) {
+            try {
+              setUser(JSON.parse(savedAdmin));
+              setLoading(false);
+              return;
+            } catch {
+              localStorage.removeItem(LOCAL_ADMIN_STORAGE_KEY);
+            }
+          }
+        }
         setUser(null);
       }
       setLoading(false);
@@ -78,6 +103,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     setError(null);
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Si ingresa con las credenciales de administrador en el botón normal de "Ingresar"
+    if (ADMIN_EMAILS.includes(normalizedEmail) && password === ADMIN_DEFAULT_PASS) {
+      const adminUser: User = {
+        uid: 'admin-master-uid',
+        nombre: 'Administrador SLP',
+        email: normalizedEmail,
+        regionFavorita: 'Huasteca',
+        isAdmin: true,
+      };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LOCAL_ADMIN_STORAGE_KEY, JSON.stringify(adminUser));
+      }
+      setUser(adminUser);
+      return;
+    }
+
     try {
       await loginWithEmail(email, password);
     } catch (err) {
@@ -107,14 +150,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = async () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOCAL_ADMIN_STORAGE_KEY);
+    }
     await logoutUser();
     setUser(null);
   };
 
   const updatePreferences = async (regionFavorita: Region) => {
     if (!user) return;
-    await updateUserProfile(user.uid, { regionFavorita });
-    setUser((prev) => prev ? { ...prev, regionFavorita } : prev);
+    if (user.uid !== 'admin-master-uid') {
+      await updateUserProfile(user.uid, { regionFavorita });
+    }
+    setUser((prev) => (prev ? { ...prev, regionFavorita } : prev));
   };
 
   const clearError = () => setError(null);

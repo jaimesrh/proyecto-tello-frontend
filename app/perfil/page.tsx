@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth, Region } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
-import { LogOut, MapPin, Bell, Compass } from 'lucide-react';
+import { LogOut, MapPin, Bell, Compass, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import PassportGrid from '@/components/PassportGrid';
@@ -53,13 +53,24 @@ export default function PerfilPage() {
             Gestiona tus preferencias e itinerarios de viaje.
           </p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 rounded-xl bg-surface-100 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:bg-surface-800 dark:text-red-400 dark:hover:bg-red-900/20"
-        >
-          <LogOut className="h-4 w-4" />
-          Cerrar Sesión
-        </button>
+        <div className="flex items-center gap-3">
+          {user.isAdmin && (
+            <Link
+              href="/admin"
+              className="flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-amber-500"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              Panel de Administración
+            </Link>
+          )}
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 rounded-xl bg-surface-100 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:bg-surface-800 dark:text-red-400 dark:hover:bg-red-900/20"
+          >
+            <LogOut className="h-4 w-4" />
+            Cerrar Sesión
+          </button>
+        </div>
       </motion.div>
 
       <div className="grid gap-8 md:grid-cols-3">
