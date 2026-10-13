@@ -20,6 +20,7 @@ import {
   LogOut,
   CheckCircle2,
   MapPin,
+  Navigation,
 } from 'lucide-react';
 import { Noticia } from '@/lib/firebaseFirestore';
 import { Evento } from '@/lib/eventos';
@@ -53,6 +54,13 @@ import {
   getAllReviewsForAdmin,
   deleteReviewAsAdmin,
 } from '@/lib/adminFirebase';
+import {
+  getManagedMapLocations,
+  DEFAULT_MAP_LOCATIONS,
+  MapLocationConfig,
+} from '@/lib/mapPinsFirebase';
+import AdminMapPinEditor from '@/components/AdminMapPinEditor';
+import AdminComoLlegarEditor from '@/components/AdminComoLlegarEditor';
 
 import { useAuth } from '@/context/AuthContext';
 import AuthModal from '@/components/AuthModal';
@@ -63,6 +71,8 @@ type AdminTab =
   | 'gastronomia'
   | 'mercado'
   | 'tours'
+  | 'mapa_pines'
+  | 'como_llegar'
   | 'moderacion';
 
 const COMUNIDADES_POR_REGION: Record<string, string[]> = {
@@ -130,6 +140,7 @@ export default function AdminDashboardPage() {
   const [platillos, setPlatillos] = useState<Platillo[]>([]);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [tours, setTours] = useState<Tour[]>([]);
+  const [mapLocations, setMapLocations] = useState<MapLocationConfig[]>(DEFAULT_MAP_LOCATIONS);
   const [communityPhotos, setCommunityPhotos] = useState<SpotPhoto[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -157,12 +168,13 @@ export default function AdminDashboardPage() {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [n, ev, pl, pr, tr, ph, rv] = await Promise.all([
+      const [n, ev, pl, pr, tr, ml, ph, rv] = await Promise.all([
         getManagedNoticias(),
         getManagedEventos(),
         getManagedPlatillos(),
         getManagedProductos(),
         getManagedTours(),
+        getManagedMapLocations(),
         getCommunityPhotos(),
         getAllReviewsForAdmin(),
       ]);
@@ -171,6 +183,7 @@ export default function AdminDashboardPage() {
       setPlatillos(pl);
       setProductos(pr);
       setTours(tr);
+      setMapLocations(ml);
       setCommunityPhotos(ph);
       setReviews(rv);
     } finally {
@@ -457,13 +470,15 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Tarjetas de Resumen Rápido */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-8">
           {[
             { id: 'noticias', label: 'Noticias', count: noticias.length, icon: Newspaper, color: 'text-amber-500' },
             { id: 'calendario', label: 'Eventos', count: eventos.length, icon: CalendarDays, color: 'text-purple-500' },
             { id: 'gastronomia', label: 'Platillos', count: platillos.length, icon: Utensils, color: 'text-orange-500' },
             { id: 'mercado', label: 'Artesanías', count: productos.length, icon: ShoppingBag, color: 'text-emerald-500' },
             { id: 'tours', label: 'Tours', count: tours.length, icon: Compass, color: 'text-blue-500' },
+            { id: 'mapa_pines', label: 'Pines Mapa', count: mapLocations.length, icon: MapPin, color: 'text-cyan-500' },
+            { id: 'como_llegar', label: 'Cómo Llegar', count: mapLocations.length, icon: Navigation, color: 'text-teal-500' },
             { id: 'moderacion', label: 'Comunidad', count: communityPhotos.length + reviews.length, icon: Camera, color: 'text-rose-500' },
           ].map((stat) => {
             const Icon = stat.icon;
@@ -886,7 +901,33 @@ export default function AdminDashboardPage() {
             )}
 
             {/* ==========================================
-                TAB 6: MODERACIÓN DE COMUNIDAD
+                TAB 6: EDITOR DE PINES DEL MAPA INTERACTIVO
+               ========================================== */}
+            {activeTab === 'mapa_pines' && (
+              <AdminMapPinEditor
+                locations={mapLocations}
+                onLocationsChange={(updated) => {
+                  setMapLocations(updated);
+                  showToast('Ubicación del pin actualizada en el mapa interactivo');
+                }}
+              />
+            )}
+
+            {/* ==========================================
+                TAB 7: GESTOR DE "CÓMO LLEGAR" Y GOOGLE MAPS
+               ========================================== */}
+            {activeTab === 'como_llegar' && (
+              <AdminComoLlegarEditor
+                locations={mapLocations}
+                onLocationsChange={(updated) => {
+                  setMapLocations(updated);
+                  showToast('Ruta y mapa de Google Maps guardados con éxito');
+                }}
+              />
+            )}
+
+            {/* ==========================================
+                TAB 8: MODERACIÓN DE COMUNIDAD
                ========================================== */}
             {activeTab === 'moderacion' && (
               <div className="space-y-10">

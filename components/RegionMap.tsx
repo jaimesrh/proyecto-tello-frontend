@@ -1,11 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ChevronRight, TreePine, Info, CloudSun, Map } from 'lucide-react';
+import { MapPin, ChevronRight, TreePine, Info, CloudSun, Map, Navigation } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import Link from 'next/link';
 import type { Region, Paraje } from '@/lib/types';
+import {
+  getManagedMapLocations,
+  DEFAULT_MAP_LOCATIONS,
+  MapLocationConfig,
+} from '@/lib/mapPinsFirebase';
+import ComoLlegarModal from './ComoLlegarModal';
 
 interface RegionMapProps {
   regiones: Region[];
@@ -50,6 +56,34 @@ export default function RegionMap({ regiones }: RegionMapProps) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [selectedParaje, setSelectedParaje] = useState<Paraje | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('general');
+  const [mapLocations, setMapLocations] = useState<MapLocationConfig[]>(DEFAULT_MAP_LOCATIONS);
+  const [comoLlegarTarget, setComoLlegarTarget] = useState<MapLocationConfig | null>(null);
+
+  useEffect(() => {
+    getManagedMapLocations()
+      .then((locs) => setMapLocations(locs))
+      .catch(() => {});
+  }, []);
+
+  const findLocationConfig = (slug: string, fallbackNombre?: string, fallbackMunicipio?: string, fallbackRegion?: string, fallbackX?: number, fallbackY?: number, tipo: 'pueblo' | 'paraje' = 'paraje'): MapLocationConfig => {
+    const found = mapLocations.find((l) => l.slug === slug);
+    if (found) return found;
+    return {
+      id: `${tipo}-${slug}`,
+      slug,
+      nombre: fallbackNombre || slug,
+      tipo,
+      region: (fallbackRegion as any) || 'Huasteca',
+      municipio: fallbackMunicipio || fallbackNombre || 'San Luis Potosí',
+      svgX: fallbackX ?? 300,
+      svgY: fallbackY ?? 250,
+      googleMapsQuery: `${fallbackNombre || slug}, San Luis Potosi, Mexico`,
+      puntoPartida: 'San Luis Potosí Capital / Ciudad Valles',
+      distancia: 'Consultar ruta en mapa',
+      tiempoEstimado: 'Consultar tráfico en tiempo real',
+      comoLlegar: 'Utiliza el mapa interactivo de Google Maps para trazar la ruta óptima desde tu ubicación actual.',
+    };
+  };
 
   const activeRegionData = regiones.find((r) => r.nombre === activeRegion);
 
@@ -165,15 +199,66 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                       </text>
                     </g>
 
+                    {/* Render Pueblos Mágicos pins if active layer is PUEBLOS_MAGICOS */}
+                    {activeLayer === 'PUEBLOS_MAGICOS' && region.pueblos && region.pueblos.map((pueblo) => {
+                      const locConfig = findLocationConfig(
+                        pueblo.slug,
+                        pueblo.nombre,
+                        pueblo.nombre,
+                        region.nombre,
+                        undefined,
+                        undefined,
+                        'pueblo'
+                      );
+                      return (
+                        <g
+                          key={`pueblo-pin-${pueblo.id}`}
+                          transform={`translate(${locConfig.svgX}, ${locConfig.svgY})`}
+                          className="cursor-pointer group"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveRegion(region.nombre);
+                          }}
+                        >
+                          <g className="transition-transform duration-300 group-hover:scale-125" style={{ transformOrigin: '0px 0px' }}>
+                            <circle
+                              r="14"
+                              fill="#F59E0B"
+                              stroke="white"
+                              strokeWidth="2.5"
+                              className="drop-shadow-md transition-colors duration-300"
+                            />
+                            <TreePine
+                              x="-8"
+                              y="-8"
+                              width={16}
+                              height={16}
+                              className="text-white"
+                              strokeWidth={2.2}
+                            />
+                          </g>
+                        </g>
+                      );
+                    })}
+
                     {/* Render Parajes if active layer is PARAJES_HIDROLOGICOS */}
                     {activeLayer === 'PARAJES_HIDROLOGICOS' && region.parajes && region.parajes.map((paraje) => {
                       const Icon = getDynamicIcon(paraje.tokenIcon);
                       const isParajeSelected = selectedParaje?.id === paraje.id;
+                      const locConfig = findLocationConfig(
+                        paraje.slug,
+                        paraje.nombre,
+                        paraje.municipio,
+                        region.nombre,
+                        paraje.svgX,
+                        paraje.svgY,
+                        'paraje'
+                      );
                       
                       return (
                         <g 
                           key={`paraje-${paraje.id}`}
-                          transform={`translate(${paraje.svgX}, ${paraje.svgY})`}
+                          transform={`translate(${locConfig.svgX}, ${locConfig.svgY})`}
                           className="cursor-pointer group"
                           onClick={(e) => handleParajeClick(e, paraje, region.nombre)}
                         >
@@ -203,7 +288,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
 
             {!activeRegion && (
               <p className="text-center text-sm font-sans text-surface-500 dark:text-surface-400 mt-6">
-                Haz clic en {activeLayer === 'PUEBLOS_MAGICOS' ? 'una región' : 'un icono del mapa'} para comenzar tu viaje
+                Haz clic en {activeLayer === 'PUEBLOS_MAGICOS' ? 'una región o pin' : 'un icono del mapa'} para comenzar tu viaje
               </p>
             )}
           </div>
@@ -229,21 +314,44 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                     />
                   </div>
 
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-inner">
-                      {(() => {
-                         const Icon = getDynamicIcon(selectedParaje.tokenIcon);
-                         return <Icon className="w-6 h-6" />;
-                      })()}
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-inner">
+                        {(() => {
+                           const Icon = getDynamicIcon(selectedParaje.tokenIcon);
+                           return <Icon className="w-6 h-6" />;
+                        })()}
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-display font-semibold text-surface-900 dark:text-surface-50">
+                          {selectedParaje.nombre}
+                        </h3>
+                        <p className="text-sm font-medium text-surface-500 dark:text-surface-400">
+                          {selectedParaje.municipio} • Región {activeRegion}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-display font-semibold text-surface-900 dark:text-surface-50">
-                        {selectedParaje.nombre}
-                      </h3>
-                      <p className="text-sm font-medium text-surface-500 dark:text-surface-400">
-                        {selectedParaje.municipio} • Región {activeRegion}
-                      </p>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setComoLlegarTarget(
+                          findLocationConfig(
+                            selectedParaje.slug,
+                            selectedParaje.nombre,
+                            selectedParaje.municipio,
+                            activeRegion || 'Huasteca',
+                            selectedParaje.svgX,
+                            selectedParaje.svgY,
+                            'paraje'
+                          )
+                        )
+                      }
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all"
+                    >
+                      <Navigation className="w-4 h-4" />
+                      Cómo llegar (Google Maps)
+                    </button>
                   </div>
 
                   {/* Tabs */}
@@ -264,7 +372,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                       onClick={() => setActiveTab('logistica')}
                       className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === 'logistica' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-surface-500 hover:text-surface-700 dark:hover:text-surface-300'}`}
                     >
-                      Logística
+                      Logística y Ruta
                     </button>
                   </div>
 
@@ -290,7 +398,38 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                       )}
                       {activeTab === 'logistica' && (
                         <div className="space-y-4">
-                          <p><Map className="inline w-4 h-4 mr-2 text-emerald-500" />{selectedParaje.logistica}</p>
+                          <p>
+                            <Map className="inline w-4 h-4 mr-2 text-emerald-500" />
+                            {findLocationConfig(
+                              selectedParaje.slug,
+                              selectedParaje.nombre,
+                              selectedParaje.municipio,
+                              activeRegion || 'Huasteca',
+                              selectedParaje.svgX,
+                              selectedParaje.svgY,
+                              'paraje'
+                            ).comoLlegar || selectedParaje.logistica}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setComoLlegarTarget(
+                                findLocationConfig(
+                                  selectedParaje.slug,
+                                  selectedParaje.nombre,
+                                  selectedParaje.municipio,
+                                  activeRegion || 'Huasteca',
+                                  selectedParaje.svgX,
+                                  selectedParaje.svgY,
+                                  'paraje'
+                                )
+                              )
+                            }
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-700 dark:text-emerald-300 text-xs font-bold transition-colors"
+                          >
+                            <Navigation className="w-3.5 h-3.5" />
+                            Abrir Mapa Interactivo de Google Maps
+                          </button>
                         </div>
                       )}
                     </motion.div>
@@ -329,6 +468,27 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                             <h4 className="font-semibold text-surface-900 dark:text-surface-50">{paraje.nombre}</h4>
                             <p className="text-xs text-surface-500">{paraje.municipio}</p>
                           </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setComoLlegarTarget(
+                                findLocationConfig(
+                                  paraje.slug,
+                                  paraje.nombre,
+                                  paraje.municipio,
+                                  activeRegionData.nombre,
+                                  paraje.svgX,
+                                  paraje.svgY,
+                                  'paraje'
+                                )
+                              );
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition-colors"
+                          >
+                            <Navigation className="w-3.5 h-3.5" />
+                            Cómo llegar
+                          </button>
                           <ChevronRight className="w-4 h-4 text-surface-400" />
                         </motion.div>
                       );
@@ -369,40 +529,65 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.4 }}
+                        className="glass-panel p-5 hover-lift group"
                       >
-                        <Link href={`/pueblo/${pueblo.slug}`}>
-                          <div className="glass-panel p-5 hover-lift group cursor-pointer block">
-                            <div className="flex items-start gap-5">
-                              <div
-                                className="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-inner transition-colors duration-300"
-                                style={{ backgroundColor: `${activeRegionData.colorHex}15` }}
-                              >
-                                <TreePine
-                                  className="w-6 h-6 transition-transform duration-300 group-hover:scale-110"
-                                  style={{ color: activeRegionData.colorHex }}
-                                />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between">
-                                  <div>
-                                    <h4 className="font-display font-semibold text-xl text-surface-900 dark:text-surface-50 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors mb-1">
-                                      {pueblo.nombre}
-                                    </h4>
-                                    {pueblo.altitud && (
-                                      <p className="text-xs text-surface-500 dark:text-surface-400 mb-2">
-                                        {pueblo.altitud} msnm
-                                      </p>
-                                    )}
-                                  </div>
-                                  <ChevronRight className="w-5 h-5 text-surface-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
-                                </div>
-                                <p className="text-sm text-surface-600 dark:text-surface-300 line-clamp-2 leading-relaxed">
-                                  {pueblo.descripcionBreve}
-                                </p>
+                        <div className="flex items-start gap-5">
+                          <div
+                            className="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-inner transition-colors duration-300"
+                            style={{ backgroundColor: `${activeRegionData.colorHex}15` }}
+                          >
+                            <TreePine
+                              className="w-6 h-6 transition-transform duration-300 group-hover:scale-110"
+                              style={{ color: activeRegionData.colorHex }}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2">
+                              <Link href={`/pueblo/${pueblo.slug}`} className="hover:underline">
+                                <h4 className="font-display font-semibold text-xl text-surface-900 dark:text-surface-50 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors mb-1">
+                                  {pueblo.nombre}
+                                </h4>
+                                {pueblo.altitud && (
+                                  <p className="text-xs text-surface-500 dark:text-surface-400 mb-2">
+                                    {pueblo.altitud} msnm
+                                  </p>
+                                )}
+                              </Link>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setComoLlegarTarget(
+                                      findLocationConfig(
+                                        pueblo.slug,
+                                        pueblo.nombre,
+                                        pueblo.nombre,
+                                        activeRegionData.nombre,
+                                        undefined,
+                                        undefined,
+                                        'pueblo'
+                                      )
+                                    )
+                                  }
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-sm transition-colors"
+                                >
+                                  <Navigation className="w-3.5 h-3.5" />
+                                  Cómo llegar
+                                </button>
+                                <Link
+                                  href={`/pueblo/${pueblo.slug}`}
+                                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-100 dark:bg-surface-800 hover:bg-amber-50 dark:hover:bg-amber-950/30 text-surface-700 dark:text-surface-200 text-xs font-semibold transition-colors"
+                                >
+                                  Explorar
+                                  <ChevronRight className="w-4 h-4 text-surface-400 group-hover:text-amber-600 transition-all" />
+                                </Link>
                               </div>
                             </div>
+                            <p className="text-sm text-surface-600 dark:text-surface-300 line-clamp-2 leading-relaxed">
+                              {pueblo.descripcionBreve}
+                            </p>
                           </div>
-                        </Link>
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -543,6 +728,11 @@ export default function RegionMap({ regiones }: RegionMapProps) {
           </div>
         </div>
       </div>
+
+      <ComoLlegarModal
+        location={comoLlegarTarget}
+        onClose={() => setComoLlegarTarget(null)}
+      />
     </section>
   );
 }
