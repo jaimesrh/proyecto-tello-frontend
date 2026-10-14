@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ChevronRight, TreePine, Info, CloudSun, Map, Navigation } from 'lucide-react';
+import { MapPin, ChevronRight, ChevronLeft, TreePine, Info, CloudSun, Map, Navigation } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import Link from 'next/link';
-import type { Region, Paraje } from '@/lib/types';
+import type { Region, Paraje, PuebloResumen } from '@/lib/types';
 import {
   getManagedMapLocations,
   DEFAULT_MAP_LOCATIONS,
@@ -54,6 +54,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
   const [activeLayer, setActiveLayer] = useState<LayerType>('PUEBLOS_MAGICOS');
   const [activeRegion, setActiveRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const [selectedPueblo, setSelectedPueblo] = useState<PuebloResumen | null>(null);
   const [selectedParaje, setSelectedParaje] = useState<Paraje | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('general');
   const [mapLocations, setMapLocations] = useState<MapLocationConfig[]>(DEFAULT_MAP_LOCATIONS);
@@ -89,9 +90,16 @@ export default function RegionMap({ regiones }: RegionMapProps) {
 
   const handleRegionClick = (nombre: string) => {
     setActiveRegion(activeRegion === nombre ? null : nombre);
+    setSelectedPueblo(null);
     if (activeLayer === 'PARAJES_HIDROLOGICOS') {
       setSelectedParaje(null); // Reset paraje selection when toggling region
     }
+  };
+
+  const handlePuebloClick = (e: React.MouseEvent, pueblo: PuebloResumen, regionNombre: string) => {
+    e.stopPropagation();
+    setActiveRegion(regionNombre);
+    setSelectedPueblo(pueblo);
   };
 
   const handleParajeClick = (e: React.MouseEvent, paraje: Paraje, regionNombre: string) => {
@@ -120,7 +128,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
           {/* Layer Switcher */}
           <div className="inline-flex items-center p-1 bg-surface-200 dark:bg-surface-800 rounded-full shadow-inner border border-surface-300 dark:border-surface-700">
             <button
-              onClick={() => { setActiveLayer('PUEBLOS_MAGICOS'); setSelectedParaje(null); }}
+              onClick={() => { setActiveLayer('PUEBLOS_MAGICOS'); setSelectedParaje(null); setSelectedPueblo(null); }}
               className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
                 activeLayer === 'PUEBLOS_MAGICOS'
                   ? 'bg-white dark:bg-surface-600 text-amber-700 dark:text-amber-400 shadow-sm'
@@ -131,7 +139,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
               Pueblos Mágicos
             </button>
             <button
-              onClick={() => setActiveLayer('PARAJES_HIDROLOGICOS')}
+              onClick={() => { setActiveLayer('PARAJES_HIDROLOGICOS'); setSelectedParaje(null); setSelectedPueblo(null); }}
               className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
                 activeLayer === 'PARAJES_HIDROLOGICOS'
                   ? 'bg-white dark:bg-surface-600 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -201,6 +209,7 @@ export default function RegionMap({ regiones }: RegionMapProps) {
 
                     {/* Render Pueblos Mágicos pins if active layer is PUEBLOS_MAGICOS */}
                     {activeLayer === 'PUEBLOS_MAGICOS' && region.pueblos && region.pueblos.map((pueblo) => {
+                      const isPuebloSelected = selectedPueblo?.id === pueblo.id;
                       const locConfig = findLocationConfig(
                         pueblo.slug,
                         pueblo.nombre,
@@ -215,17 +224,23 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                           key={`pueblo-pin-${pueblo.id}`}
                           transform={`translate(${locConfig.svgX}, ${locConfig.svgY})`}
                           className="cursor-pointer group"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveRegion(region.nombre);
-                          }}
+                          onClick={(e) => handlePuebloClick(e, pueblo, region.nombre)}
                         >
                           <g className="transition-transform duration-300 group-hover:scale-125" style={{ transformOrigin: '0px 0px' }}>
+                            {isPuebloSelected && (
+                              <circle
+                                r="21"
+                                fill="none"
+                                stroke="#F59E0B"
+                                strokeWidth="3"
+                                className="animate-pulse"
+                              />
+                            )}
                             <circle
-                              r="14"
-                              fill="#F59E0B"
+                              r={isPuebloSelected ? '16' : '14'}
+                              fill={isPuebloSelected ? '#D97706' : '#F59E0B'}
                               stroke="white"
-                              strokeWidth="2.5"
+                              strokeWidth={isPuebloSelected ? 3 : 2.5}
                               className="drop-shadow-md transition-colors duration-300"
                             />
                             <TreePine
@@ -498,7 +513,122 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                     )}
                   </div>
                 </motion.div>
-              ) : activeLayer === 'PUEBLOS_MAGICOS' && activeRegionData ? (
+              ) : activeLayer === 'PUEBLOS_MAGICOS' && selectedPueblo ? (
+                /* VISTA PUEBLO MÁGICO INDIVIDUAL (Al hacer clic en un pin de pueblo) */
+                <motion.div
+                  key={`pueblo-detail-${selectedPueblo.id}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="glass-panel p-6 overflow-hidden"
+                >
+                  {/* Botón para volver a ver la región completa */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPueblo(null)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 hover:underline mb-4"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Ver todos los pueblos de la Región {activeRegion}
+                  </button>
+
+                  <div className="relative w-full h-52 md:h-64 mb-6 rounded-2xl overflow-hidden shadow-md bg-surface-200 dark:bg-surface-800">
+                    <img
+                      src={selectedPueblo.imagenUrl || `/images/${selectedPueblo.slug}.jpg`}
+                      alt={selectedPueblo.nombre}
+                      className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-1.5">
+                      <TreePine className="w-3.5 h-3.5 text-amber-400" />
+                      Pueblo Mágico
+                    </div>
+                    {selectedPueblo.altitud && (
+                      <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-medium">
+                        {selectedPueblo.altitud} msnm
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                      <h3 className="text-3xl font-display font-bold text-surface-900 dark:text-surface-50">
+                        {selectedPueblo.nombre}
+                      </h3>
+                      <p className="text-sm font-medium text-surface-500 dark:text-surface-400">
+                        Región {activeRegion}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setComoLlegarTarget(
+                            findLocationConfig(
+                              selectedPueblo.slug,
+                              selectedPueblo.nombre,
+                              selectedPueblo.nombre,
+                              activeRegion || 'Huasteca',
+                              undefined,
+                              undefined,
+                              'pueblo'
+                            )
+                          )
+                        }
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all"
+                      >
+                        <Navigation className="w-4 h-4" />
+                        Cómo llegar (Google Maps)
+                      </button>
+
+                      <Link
+                        href={`/pueblo/${selectedPueblo.slug}`}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-md shadow-amber-600/20 transition-all"
+                      >
+                        Explorar Guía
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  <p className="text-surface-600 dark:text-surface-300 leading-relaxed text-sm md:text-base mb-6">
+                    {selectedPueblo.descripcionBreve}
+                  </p>
+
+                  {/* Resumen de ruta / cómo llegar rápido */}
+                  {(() => {
+                    const loc = findLocationConfig(
+                      selectedPueblo.slug,
+                      selectedPueblo.nombre,
+                      selectedPueblo.nombre,
+                      activeRegion || 'Huasteca',
+                      undefined,
+                      undefined,
+                      'pueblo'
+                    );
+                    return (
+                      <div className="p-4 rounded-xl bg-surface-100/70 dark:bg-surface-800/60 border border-surface-200 dark:border-surface-700/60 space-y-2 text-xs">
+                        <div className="flex items-center justify-between text-surface-700 dark:text-surface-300">
+                          <span className="font-semibold flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-amber-500" /> Origen sugerido:
+                          </span>
+                          <span className="font-medium">{loc.puntoPartida}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-surface-700 dark:text-surface-300">
+                          <span className="font-semibold flex items-center gap-1.5">
+                            <Navigation className="w-3.5 h-3.5 text-emerald-500" /> Tiempo estimado:
+                          </span>
+                          <span className="font-medium">{loc.tiempoEstimado}</span>
+                        </div>
+                        <div className="pt-2 border-t border-surface-200/50 dark:border-surface-700/40 text-surface-500 dark:text-surface-400">
+                          <p className="line-clamp-2">{loc.comoLlegar}</p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </motion.div>
+              ) : activeLayer === 'PUEBLOS_MAGICOS' && activeRegionData && !selectedPueblo ? (
                 /* VISTA PUEBLOS MÁGICOS (Original) */
                 <motion.div
                   key={activeRegion}
@@ -529,7 +659,8 @@ export default function RegionMap({ regiones }: RegionMapProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.4 }}
-                        className="glass-panel p-5 hover-lift group"
+                        onClick={(e) => handlePuebloClick(e as any, pueblo, activeRegionData.nombre)}
+                        className="glass-panel p-5 hover-lift group cursor-pointer"
                       >
                         <div className="flex items-start gap-5">
                           <div
